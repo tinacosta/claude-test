@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soprano Ornamentation Exercises</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
         * {
             margin: 0;
@@ -287,10 +286,23 @@
             <button class="btn-restart" id="btn-restart" disabled>Restart</button>
         </div>
 
-        <div class="status-text" id="status-text">Select an exercise and press Start</div>
+        <div class="status-text" id="status-text">Loading audio library...</div>
     </div>
 
+    <!-- Load Tone.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"
+            onerror="document.getElementById('status-text').textContent='Failed to load audio library. Please check your internet connection and refresh.'; alert('Audio library failed to load. Please:\n1. Check your internet connection\n2. Refresh the page\n3. Try a different network');"></script>
+
     <script>
+        // Check if Tone.js loaded successfully
+        if (typeof Tone === 'undefined') {
+            document.getElementById('status-text').textContent = 'Audio library not loaded. Please refresh.';
+            alert('Tone.js failed to load. Please check your internet connection and refresh the page.');
+        } else {
+            console.log('Tone.js loaded successfully, version:', Tone.version);
+            document.getElementById('status-text').textContent = 'Select an exercise and press Start';
+        }
+
         // Tone.js Setup
         let synth;
         let currentExerciseIndex = 0;
@@ -304,6 +316,10 @@
         // Initialize synth
         function initializeSynth() {
             if (!synth) {
+                if (typeof Tone === 'undefined') {
+                    console.error('Tone.js not loaded!');
+                    return;
+                }
                 synth = new Tone.Synth({
                     oscillator: {
                         type: 'sine'
@@ -614,6 +630,13 @@
 
         function startExercise() {
             try {
+                // Check if Tone.js is loaded
+                if (typeof Tone === 'undefined') {
+                    alert('Audio library not loaded. Please refresh the page and make sure you have an internet connection.');
+                    document.getElementById('status-text').textContent = 'Audio library missing - please refresh';
+                    return;
+                }
+
                 console.log('Starting exercise...');
                 document.getElementById('status-text').textContent = 'Initializing audio...';
 
