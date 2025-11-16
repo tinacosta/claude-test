@@ -195,7 +195,7 @@
 <body>
     <div class="container">
         <h1>🎵 Soprano Ornamentation Exercises</h1>
-        <p class="subtitle">D3 to D6 Range • 10 Advanced Exercises</p>
+        <p class="subtitle">D3 to D6 Range • 13 Advanced Exercises</p>
 
         <div class="exercise-selector">
             <select id="exercise-select">
@@ -210,6 +210,9 @@
                 <option value="mordent">German Lieder Mordent</option>
                 <option value="melisma">Spanish Melisma</option>
                 <option value="staccato">Staccato Pearls (Perlen)</option>
+                <option value="mariah">🎤 Mariah Carey Melismatic Run</option>
+                <option value="whitney">🎤 Whitney Houston Gospel Run</option>
+                <option value="ariana">🎤 Ariana Grande Contemporary Run</option>
             </select>
         </div>
 
@@ -444,6 +447,30 @@
                 syllables: ['a', 'i'],
                 technique: 'Brilliant staccato notes like pearls on a string. Light, precise, and dazzling. Think Queen of the Night - each note sparkles individually.',
                 primer: 'Staccato arpeggios: 1-3-5-8 (do-mi-sol-do). Brilliant articulation ascending.'
+            },
+            mariah: {
+                name: 'Mariah Carey Melismatic Run',
+                pattern: [0, 1, 2, 4, 5, 7, 9, 7, 5, 4, 2, 1, 0], // Chromatic start to full octave
+                duration: 0.12,
+                syllables: ['a', 'e', 'i', 'oh'],
+                technique: 'Ultra-fast melismatic passages mixing chromatic and diatonic notes. Focus on throat relaxation and whistle-register readiness. Let the notes flow like water with effortless agility.',
+                primer: 'Melismatic cascade: 1-♯1-2-3-4-5-6-5-4-3-2-♯1-1. Fast chromatic-to-diatonic runs with decorative flourishes.'
+            },
+            whitney: {
+                name: 'Whitney Houston Gospel Run',
+                pattern: [0, 2, 3, 5, 7, 10, 7, 5, 3, 2, 0], // Pentatonic-influenced gospel run
+                duration: 0.15,
+                syllables: ['oh', 'yeah', 'a', 'e'],
+                technique: 'Soulful gospel runs with emotional depth. Add slight scoops and falls for authenticity. Let the spirit move through each note with power and passion.',
+                primer: 'Gospel pentatonic: 1-2-♭3-4-5-♭7-5-4-♭3-2-1. Pentatonic-based runs with soul and power.'
+            },
+            ariana: {
+                name: 'Ariana Grande Contemporary Run',
+                pattern: [0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2, 0], // Full octave scalar with chromatic touches
+                duration: 0.11,
+                syllables: ['a', 'e', 'i'],
+                technique: 'Modern pop runs with precision and speed. Light, airy tone with crisp articulation. Emphasis on agility while maintaining breathiness in the upper register.',
+                primer: 'Contemporary cascade: 1-2-3-4-5-6-7-8-7-6-5-4-3-2-1. Full octave runs with modern pop styling.'
             }
         };
 
