@@ -553,7 +553,7 @@
         }
 
         // Play a note with Tone.js
-        function playNote(frequency, duration, options = {}) {
+        function playNote(noteName, duration, options = {}) {
             initializeSynth();
 
             const noteDuration = duration * (60 / tempo); // Adjust for tempo
@@ -570,27 +570,35 @@
                 synth.envelope.release = 0.1;
             }
 
-            // Play the note
-            synth.triggerAttackRelease(frequency, noteDuration);
+            // Play the note - Tone.js accepts note names like "C4"
+            try {
+                synth.triggerAttackRelease(noteName, noteDuration);
+            } catch (error) {
+                console.error('Error playing note:', noteName, error);
+            }
 
             return noteDuration * 1000; // Return duration in milliseconds
         }
 
         // Play glide between notes using Tone.js
-        function playGlide(startFreq, endFreq, duration) {
+        function playGlide(startNote, endNote, duration) {
             initializeSynth();
 
             const glideDuration = duration * (60 / tempo);
             const now = Tone.now();
 
-            // Trigger note
-            synth.triggerAttack(startFreq, now);
+            try {
+                // Trigger note
+                synth.triggerAttack(startNote, now);
 
-            // Glide to end frequency
-            synth.frequency.rampTo(endFreq, glideDuration, now);
+                // Glide to end note
+                synth.frequency.rampTo(endNote, glideDuration, now);
 
-            // Release after duration
-            synth.triggerRelease(now + glideDuration);
+                // Release after duration
+                synth.triggerRelease(now + glideDuration);
+            } catch (error) {
+                console.error('Error playing glide:', startNote, endNote, error);
+            }
 
             return glideDuration * 1000;
         }
@@ -603,39 +611,55 @@
         let breathCounter = 0;
 
         async function startExercise() {
-            // Start Tone.js audio context (required by browser autoplay policies)
-            await Tone.start();
-            console.log('Tone.js started');
+            try {
+                console.log('Starting exercise...');
 
-            initializeSynth();
+                // Start Tone.js audio context (required by browser autoplay policies)
+                await Tone.start();
+                console.log('Tone.js started successfully');
 
-            if (isPaused) {
-                isPaused = false;
+                initializeSynth();
+                console.log('Synth initialized');
+
+                if (isPaused) {
+                    isPaused = false;
+                    isPlaying = true;
+                    updateUI();
+                    continueExercise();
+                    return;
+                }
+
                 isPlaying = true;
+                isPaused = false;
+                currentScaleIndex = 0;
+                patternStepIndex = 0;
+                breathCounter = 0;
+
+                exerciseScale = generateExerciseScale();
+                console.log('Exercise scale generated:', exerciseScale.length, 'notes');
+
                 updateUI();
-                continueExercise();
-                return;
+                console.log('Starting playback...');
+                playExerciseStep();
+            } catch (error) {
+                console.error('Error starting exercise:', error);
+                alert('Error starting audio: ' + error.message + '\n\nPlease check the browser console for details.');
             }
-
-            isPlaying = true;
-            isPaused = false;
-            currentScaleIndex = 0;
-            patternStepIndex = 0;
-            breathCounter = 0;
-
-            exerciseScale = generateExerciseScale();
-
-            updateUI();
-            playExerciseStep();
         }
 
         function playExerciseStep() {
-            if (!isPlaying || isPaused) return;
+            if (!isPlaying || isPaused) {
+                console.log('Playback stopped - isPlaying:', isPlaying, 'isPaused:', isPaused);
+                return;
+            }
+
+            console.log('Playing step - scale index:', currentScaleIndex, 'pattern index:', patternStepIndex);
 
             const exercise = exercises[currentExerciseIndex];
 
             // Check if we need to breathe
             if (currentScaleIndex > 0 && currentScaleIndex % exercise.breathingPattern[0] === 0 && patternStepIndex === 0) {
+                console.log('Breathing pause');
                 showBreathingCue();
                 currentTimeout = setTimeout(() => {
                     continueExercise();
@@ -650,14 +674,16 @@
             if (patternStepIndex === 0) {
                 currentPattern = exercise.ornamentPattern(baseNote);
                 updateVowelDisplay(exercise);
+                console.log('New pattern for', baseNote, ':', currentPattern.map(s => s.note).join(' → '));
             }
 
             // Play current step in pattern
             const step = currentPattern[patternStepIndex];
-            const frequency = noteFrequencies[step.note];
+            const noteName = step.note;
+            console.log('Playing note:', noteName, 'duration:', step.duration);
 
             // Update display
-            document.getElementById('current-note').textContent = step.note;
+            document.getElementById('current-note').textContent = noteName;
             document.getElementById('pattern-display').textContent =
                 `Pattern: ${currentPattern.map(s => s.note).join(' → ')}`;
 
@@ -670,10 +696,10 @@
 
             if (step.glide && patternStepIndex < currentPattern.length - 1) {
                 const nextStep = currentPattern[patternStepIndex + 1];
-                const nextFreq = noteFrequencies[nextStep.note];
-                playDuration = playGlide(frequency, nextFreq, step.duration);
+                const nextNoteName = nextStep.note;
+                playDuration = playGlide(noteName, nextNoteName, step.duration);
             } else {
-                playDuration = playNote(frequency, step.duration, step);
+                playDuration = playNote(noteName, step.duration, step);
             }
 
             // Move to next step
