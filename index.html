@@ -286,20 +286,43 @@
             return baseNote;
         }
 
+        // Check if a pattern starting at a note would exceed range limits
+        function patternExceedsRange(startNote, pattern, maxNote, minNote) {
+            const allNoteNames = Object.keys(notes);
+            const maxIndex = allNoteNames.indexOf(maxNote);
+            const minIndex = allNoteNames.indexOf(minNote);
+
+            for (const interval of pattern) {
+                const transposedNote = transposeNote(startNote, interval);
+                const noteIndex = allNoteNames.indexOf(transposedNote);
+
+                if (noteIndex > maxIndex || noteIndex < minIndex) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // Generate notes for an exercise based on pattern
         function generateExerciseNotes(pattern) {
             const allNotes = [];
 
-            // Ascending
+            // Ascending - stop when pattern would exceed D6
             for (const startNote of chromaticNotes) {
+                if (patternExceedsRange(startNote, pattern, 'D6', 'D3')) {
+                    break; // Stop ascending when pattern would exceed range
+                }
                 for (const interval of pattern) {
                     allNotes.push(transposeNote(startNote, interval));
                 }
                 allNotes.push('BREATH'); // Breathing marker
             }
 
-            // Descending
+            // Descending - stop when pattern would go below D3
             for (const startNote of descendingNotes) {
+                if (patternExceedsRange(startNote, pattern, 'D6', 'D3')) {
+                    break; // Stop descending when pattern would go out of range
+                }
                 for (const interval of pattern) {
                     allNotes.push(transposeNote(startNote, interval));
                 }
