@@ -306,27 +306,34 @@
         // Generate notes for an exercise based on pattern
         function generateExerciseNotes(pattern) {
             const allNotes = [];
+            const allNoteNames = Object.keys(notes);
+            let highestStartNoteIndex = -1;
 
             // Ascending - stop when pattern would exceed D6
-            for (const startNote of chromaticNotes) {
+            for (let i = 0; i < chromaticNotes.length; i++) {
+                const startNote = chromaticNotes[i];
                 if (patternExceedsRange(startNote, pattern, 'D6', 'D3')) {
                     break; // Stop ascending when pattern would exceed range
                 }
+                highestStartNoteIndex = allNoteNames.indexOf(startNote);
                 for (const interval of pattern) {
                     allNotes.push(transposeNote(startNote, interval));
                 }
                 allNotes.push('BREATH'); // Breathing marker
             }
 
-            // Descending - stop when pattern would go below D3
-            for (const startNote of descendingNotes) {
-                if (patternExceedsRange(startNote, pattern, 'D6', 'D3')) {
-                    break; // Stop descending when pattern would go out of range
+            // Descending - start from one semitone below where we stopped ascending
+            if (highestStartNoteIndex >= 0) {
+                for (let i = highestStartNoteIndex - 1; i >= 0; i--) {
+                    const startNote = allNoteNames[i];
+                    if (patternExceedsRange(startNote, pattern, 'D6', 'D3')) {
+                        break; // Stop descending when pattern would go out of range
+                    }
+                    for (const interval of pattern) {
+                        allNotes.push(transposeNote(startNote, interval));
+                    }
+                    allNotes.push('BREATH'); // Breathing marker
                 }
-                for (const interval of pattern) {
-                    allNotes.push(transposeNote(startNote, interval));
-                }
-                allNotes.push('BREATH'); // Breathing marker
             }
 
             return allNotes;
