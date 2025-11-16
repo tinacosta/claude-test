@@ -220,43 +220,59 @@
         };
 
         // Initialize audio context on user interaction
-        function initAudio() {
+        async function initAudio() {
             if (!audioContext) {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                updateStatus('Audio initialized');
+                updateStatus('Audio context created: ' + audioContext.state);
             }
             // Resume if suspended (iOS requirement)
             if (audioContext.state === 'suspended') {
-                audioContext.resume();
+                updateStatus('Resuming audio context...');
+                await audioContext.resume();
+                updateStatus('Audio context state: ' + audioContext.state);
             }
+            return audioContext.state === 'running';
         }
 
         // Play a single note
         function playTone(frequency, duration) {
-            if (!audioContext) return duration * 1000;
+            if (!audioContext) {
+                updateStatus('ERROR: No audio context');
+                return duration * 1000;
+            }
 
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            if (audioContext.state !== 'running') {
+                updateStatus('ERROR: Audio context not running: ' + audioContext.state);
+                return duration * 1000;
+            }
 
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
 
-            oscillator.frequency.value = frequency;
-            oscillator.type = 'sine';
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
 
-            const now = audioContext.currentTime;
-            const noteDuration = duration * (60 / tempo);
+                oscillator.frequency.value = frequency;
+                oscillator.type = 'sine';
 
-            // Simple envelope
-            gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(0.3, now + 0.02);
-            gainNode.gain.linearRampToValueAtTime(0.25, now + noteDuration - 0.05);
-            gainNode.gain.linearRampToValueAtTime(0, now + noteDuration);
+                const now = audioContext.currentTime;
+                const noteDuration = duration * (60 / tempo);
 
-            oscillator.start(now);
-            oscillator.stop(now + noteDuration);
+                // Simple envelope with higher volume
+                gainNode.gain.setValueAtTime(0, now);
+                gainNode.gain.linearRampToValueAtTime(0.5, now + 0.02);
+                gainNode.gain.linearRampToValueAtTime(0.4, now + noteDuration - 0.05);
+                gainNode.gain.linearRampToValueAtTime(0, now + noteDuration);
 
-            return noteDuration * 1000;
+                oscillator.start(now);
+                oscillator.stop(now + noteDuration);
+
+                return noteDuration * 1000;
+            } catch (error) {
+                updateStatus('ERROR playing: ' + error.message);
+                return duration * 1000;
+            }
         }
 
         // Play next note in sequence
@@ -290,8 +306,16 @@
         }
 
         // Start exercise
-        function startExercise() {
-            initAudio();
+        async function startExercise() {
+            updateStatus('Initializing audio...');
+
+            const audioReady = await initAudio();
+
+            if (!audioReady) {
+                updateStatus('ERROR: Audio failed to start. State: ' + (audioContext ? audioContext.state : 'no context'));
+                alert('Audio failed to initialize.\n\nMake sure:\n1. Volume is turned up\n2. Silent mode is OFF\n3. Try refreshing the page');
+                return;
+            }
 
             if (isPaused) {
                 isPaused = false;
@@ -307,9 +331,11 @@
 
             const exercise = exercises[currentExercise];
             updateInfo(`Starting: ${exercise.name}`);
-            updateStatus('Playing...');
+            updateStatus('Audio ready! Playing...');
 
             updateButtons();
+
+            // Play first note immediately
             playNextNote();
         }
 
