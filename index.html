@@ -289,13 +289,13 @@
         // Check if a pattern starting at a note would exceed max range
         function patternExceedsMax(startNote, pattern, maxNote) {
             const allNoteNames = Object.keys(notes);
+            const startIndex = allNoteNames.indexOf(startNote);
             const maxIndex = allNoteNames.indexOf(maxNote);
 
             for (const interval of pattern) {
-                const transposedNote = transposeNote(startNote, interval);
-                const noteIndex = allNoteNames.indexOf(transposedNote);
-
-                if (noteIndex > maxIndex || noteIndex === -1) {
+                const targetIndex = startIndex + interval;
+                // Check if the target index would be out of bounds or exceed max
+                if (targetIndex < 0 || targetIndex >= allNoteNames.length || targetIndex > maxIndex) {
                     return true;
                 }
             }
@@ -305,13 +305,13 @@
         // Check if a pattern starting at a note would go below min range
         function patternGoesBelowMin(startNote, pattern, minNote) {
             const allNoteNames = Object.keys(notes);
+            const startIndex = allNoteNames.indexOf(startNote);
             const minIndex = allNoteNames.indexOf(minNote);
 
             for (const interval of pattern) {
-                const transposedNote = transposeNote(startNote, interval);
-                const noteIndex = allNoteNames.indexOf(transposedNote);
-
-                if (noteIndex < minIndex || noteIndex === -1) {
+                const targetIndex = startIndex + interval;
+                // Check if the target index would be out of bounds or below min
+                if (targetIndex < 0 || targetIndex >= allNoteNames.length || targetIndex < minIndex) {
                     return true;
                 }
             }
