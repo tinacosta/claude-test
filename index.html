@@ -266,127 +266,138 @@
             'C6': 1046.50, 'C#6': 1108.73, 'D6': 1174.66
         };
 
-        // Exercise patterns
+        // Helper to get all notes in chromatic order
+        const chromaticNotes = ['C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4',
+                                'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5', 'G#5', 'A5', 'A#5', 'B5',
+                                'C6', 'C#6', 'D6'];
+        const descendingNotes = ['C#6', 'C6', 'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5',
+                                 'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4',
+                                 'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3'];
+
+        // Helper to transpose a pattern by semitones
+        function transposeNote(baseNote, semitones) {
+            const allNoteNames = Object.keys(notes);
+            const baseIndex = allNoteNames.indexOf(baseNote);
+            if (baseIndex === -1) return baseNote;
+            const newIndex = baseIndex + semitones;
+            if (newIndex >= 0 && newIndex < allNoteNames.length) {
+                return allNoteNames[newIndex];
+            }
+            return baseNote;
+        }
+
+        // Generate notes for an exercise based on pattern
+        function generateExerciseNotes(pattern) {
+            const allNotes = [];
+
+            // Ascending
+            for (const startNote of chromaticNotes) {
+                for (const interval of pattern) {
+                    allNotes.push(transposeNote(startNote, interval));
+                }
+                allNotes.push('BREATH'); // Breathing marker
+            }
+
+            // Descending
+            for (const startNote of descendingNotes) {
+                for (const interval of pattern) {
+                    allNotes.push(transposeNote(startNote, interval));
+                }
+                allNotes.push('BREATH'); // Breathing marker
+            }
+
+            return allNotes;
+        }
+
+        // Exercise patterns (defined as interval patterns from root)
         const exercises = {
             scale: {
                 name: 'Chromatic Scale',
-                notes: ['C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4',
-                       'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5', 'G#5', 'A5', 'A#5', 'B5',
-                       'C6', 'C#6', 'D6',
-                       'C#6', 'C6', 'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5',
-                       'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4',
-                       'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3'],
-                duration: 0.5,
+                pattern: [0, 1, 2, 3, 4], // 5-note chromatic pattern
+                duration: 0.4,
                 syllables: ['ma', 'me', 'mi', 'mo', 'mu'],
                 technique: 'Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.',
-                primer: 'Chromatic scale: 1, ♯1/♭2, 2, ♯2/♭3, 3, 4, ♯4/♭5, 5, ♯5/♭6, 6, ♯6/♭7, 7, 8... Ascending by half steps with breath between each step, then descending.'
+                primer: 'Chromatic scale: 1, ♯1, 2, ♯2, 3. Five-note chromatic pattern starting on each semitone.'
             },
             trill: {
                 name: 'Baroque Trill - Italian Style',
-                notes: ['C4', 'D4', 'C4', 'D4', 'E4', 'F4', 'E4', 'F4', 'G4', 'A4', 'G4', 'A4',
-                       'B4', 'C5', 'B4', 'C5', 'D5', 'E5', 'D5', 'E5', 'F5', 'G5', 'F5', 'G5',
-                       'A5', 'B5', 'A5', 'B5', 'C6', 'D6', 'C6', 'D6'],
-                duration: 0.3,
+                pattern: [0, 2, 0, 2], // Trill: root, whole step up, root, whole step up
+                duration: 0.25,
                 syllables: ['i', 'e', 'a'],
-                technique: 'Classic upper-neighbor trill starting slowly and accelerating. Emphasize clarity and evenness. Keep the throat free and let rapid motion come from the vocal cords.',
-                primer: 'Upper-neighbor trill: 1-2-1-2, then move up a step. Pattern: do-re-do-re, mi-fa-mi-fa, sol-la-sol-la...'
+                technique: 'Classic upper-neighbor trill. Emphasize clarity and evenness. Keep the throat free and let rapid motion come from the vocal cords.',
+                primer: 'Upper-neighbor trill: 1-2-1-2 (do-re-do-re). Repeat this pattern at each semitone.'
             },
             portamento: {
                 name: 'Bel Canto Portamento',
-                notes: ['C4', 'E4', 'G4', 'C5', 'G4', 'E4', 'C4',
-                       'D4', 'F4', 'A4', 'D5', 'A4', 'F4', 'D4',
-                       'E5', 'G5', 'B5', 'E5', 'D6', 'B5', 'G5'],
-                duration: 0.6,
+                pattern: [0, 4, 7, 12, 7, 4, 0], // Major arpeggio up and down
+                duration: 0.5,
                 syllables: ['o', 'u', 'a'],
                 technique: 'Smooth gliding between notes with connected tone. Focus on seamless legato. Imagine a ribbon of sound connecting each note without breaks.',
-                primer: 'Arpeggios with smooth connection: 1-3-5-8-5-3-1. Major triads ascending through range (do-mi-sol-do...)'
+                primer: 'Arpeggios with smooth connection: 1-3-5-8-5-3-1 (do-mi-sol-do-sol-mi-do). Major triad at each pitch.'
             },
             run: {
                 name: 'Coloratura Run',
-                notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4',
-                       'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4',
-                       'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6'],
-                duration: 0.22,
+                pattern: [0, 2, 4, 5, 7, 5, 4, 2, 0], // Major scale fragment up and down
+                duration: 0.18,
                 syllables: ['a', 'i'],
                 technique: 'Rapid scale passages requiring agility and precision. Keep throat open and relaxed. Each note clear but connected like pearls on a string.',
-                primer: 'Fast diatonic runs: ascending 1-2-3-4-5-6-7-8, then descending, then ascending higher. Major scale patterns (do-re-mi-fa-sol-la-ti-do)'
+                primer: 'Fast runs: 1-2-3-4-5-4-3-2-1 (do-re-mi-fa-sol-fa-mi-re-do). Diatonic pattern at each step.'
             },
             messa: {
                 name: 'Messa di Voce with Turn',
-                notes: ['C4', 'D4', 'C4', 'B3', 'C4',
-                       'E4', 'F4', 'E4', 'D4', 'E4',
-                       'G4', 'A4', 'G4', 'F4', 'G4',
-                       'C5', 'D5', 'C5', 'B4', 'C5',
-                       'E5', 'F5', 'E5', 'D5', 'E5',
-                       'A5', 'B5', 'A5', 'G5', 'A5',
-                       'D6', 'C6', 'D6', 'C6', 'D6'],
+                pattern: [0, 2, 0, -1, 0], // Turn: root, step up, root, step down, root
                 duration: 0.45,
                 syllables: ['a', 'e', 'o'],
-                technique: 'Crescendo-decrescendo on sustained notes with ornamental turn. Master dynamic control while maintaining steady breath support. Expand then diminish the tone smoothly.',
-                primer: 'Turn around main note: 1-2-1-♭7-1. Pattern on each scale degree with dynamic swell (do-re-do-ti-do with crescendo-diminuendo)'
+                technique: 'Crescendo-decrescendo on sustained notes with ornamental turn. Master dynamic control while maintaining steady breath support.',
+                primer: 'Turn around main note: 1-2-1-7-1 (do-re-do-ti-do). Add dynamic swell on each pattern.'
             },
             appoggiatura: {
                 name: 'Appoggiatura Sequence',
-                notes: ['D4', 'C4', 'F4', 'E4', 'A4', 'G4',
-                       'C5', 'B4', 'E5', 'D5', 'G5', 'F5',
-                       'B5', 'A5', 'D6', 'C6'],
+                pattern: [2, 0, 4, 2], // Leaning notes resolving down
                 duration: 0.4,
                 syllables: ['e', 'o'],
-                technique: 'Leaning notes resolving downward. Stress the appoggiatura with a slight accent, then release smoothly to the resolution. Express the tension and release.',
-                primer: 'Leaning note resolution: 2-1, 4-3, 6-5, 8-7... Each dissonance resolves down by step (re-do, fa-mi, la-sol...)'
+                technique: 'Leaning notes resolving downward. Stress the appoggiatura with a slight accent, then release smoothly to the resolution.',
+                primer: 'Leaning note resolution: 2-1, 4-3 (re-do, fa-mi). Dissonance to resolution.'
             },
             jazz: {
                 name: 'Jazz Scoop and Fall',
-                notes: ['A3', 'C4', 'E4', 'G4', 'E4',
-                       'B3', 'D4', 'F4', 'A4', 'F4',
-                       'C4', 'E4', 'G4', 'C5', 'G4',
-                       'E5', 'G5', 'B5', 'D6', 'B5'],
-                duration: 0.5,
+                pattern: [0, 4, 7, 4, 0], // Arpeggio with scoop
+                duration: 0.45,
                 syllables: ['a', 'oh', 'yeah'],
                 technique: 'Slide into and out of notes with style. Use vibrato at the peak. Channel the freedom and expressiveness of jazz phrasing.',
-                primer: 'Scoop up to chord tones: 6-1-3-5-3, 7-2-4-6-4... Glide into arpeggios with fall-offs (la-do-mi-sol-mi with slides)'
+                primer: 'Scoop to chord tones: 1-3-5-3-1 (do-mi-sol-mi-do) with glides.'
             },
             french: {
                 name: 'French Ornamental Grace Notes',
-                notes: ['B3', 'C4', 'D4', 'E4',
-                       'E4', 'F4', 'F4', 'G4',
-                       'A4', 'B4', 'B4', 'C5',
-                       'D5', 'E5', 'F5', 'G5',
-                       'A5', 'B5', 'C6', 'D6'],
-                duration: 0.35,
+                pattern: [-1, 0, 1, 2], // Grace note approach
+                duration: 0.3,
                 syllables: ['i', 'u'],
                 technique: 'Delicate grace notes before main tones. Light and articulate, like Couperin. Quick and elegant with refined articulation.',
-                primer: 'Grace note before main note: ♭7-1, 2-3, 4-5... Quick ornamental approach from below (ti-do, re-mi, fa-sol...)'
+                primer: 'Grace note before main note: 7-1-2-3 (ti-do-re-mi). Quick ornamental approach.'
             },
             mordent: {
                 name: 'German Lieder Mordent',
-                notes: ['C4', 'B3', 'C4', 'E4', 'D4', 'E4',
-                       'G4', 'F4', 'G4', 'C5', 'B4', 'C5',
-                       'E5', 'D5', 'E5', 'G5', 'F5', 'G5',
-                       'B5', 'A5', 'B5', 'D6', 'C6', 'D6'],
-                duration: 0.35,
+                pattern: [0, -1, 0], // Lower neighbor mordent
+                duration: 0.3,
                 syllables: ['ä', 'ö', 'a'],
                 technique: 'Quick alternation with lower neighbor. Expressive and speech-like. Channel the emotional depth of German Romantic song.',
-                primer: 'Lower-neighbor mordent: 1-♭7-1, 3-2-3, 5-4-5, 8-7-8... Main note with quick dip below (do-ti-do, mi-re-mi...)'
+                primer: 'Lower-neighbor mordent: 1-7-1 (do-ti-do). Main note with quick dip below.'
             },
             melisma: {
                 name: 'Spanish Melisma',
-                notes: ['C4', 'D4', 'E4', 'G4', 'A4', 'G4', 'E4', 'C4',
-                       'E4', 'F4', 'G4', 'B4', 'C5', 'B4', 'G4', 'E4',
-                       'G5', 'A5', 'B5', 'D6', 'B5', 'A5', 'G5'],
-                duration: 0.28,
+                pattern: [0, 2, 4, 7, 9, 7, 4, 0], // Flowing scale fragment
+                duration: 0.25,
                 syllables: ['a', 'ay', 'e'],
                 technique: 'Flowing melismatic passages with passion. Channel flamenco ornamentation. Let the notes cascade with energy and expression.',
-                primer: 'Flowing scale fragments: 1-2-3-5-6-5-3-1... Cascading patterns ascending through range (do-re-mi-sol-la-sol-mi-do)'
+                primer: 'Flowing scale fragments: 1-2-3-5-6-5-3-1 (do-re-mi-sol-la-sol-mi-do). Cascading patterns.'
             },
             staccato: {
                 name: 'Staccato Pearls (Perlen)',
-                notes: ['C4', 'E4', 'G4', 'B4', 'D5', 'F5', 'A5', 'C6', 'D6',
-                       'C6', 'A5', 'F5', 'D5', 'B4', 'G4', 'E4', 'C4'],
-                duration: 0.2,
+                pattern: [0, 4, 7, 12], // Staccato arpeggio
+                duration: 0.18,
                 syllables: ['a', 'i'],
                 technique: 'Brilliant staccato notes like pearls on a string. Light, precise, and dazzling. Think Queen of the Night - each note sparkles individually.',
-                primer: 'Staccato arpeggios: 1-3-5-7-9-11-13-15... Ascending thirds with brilliant articulation (do-mi-sol-ti-re-fa-la-do-re)'
+                primer: 'Staccato arpeggios: 1-3-5-8 (do-mi-sol-do). Brilliant articulation ascending.'
             }
         };
 
@@ -447,33 +458,23 @@
             }
 
             const noteName = exercise.notes[currentNoteIndex];
+
+            // Check for breathing marker
+            if (noteName === 'BREATH') {
+                updateStatus('Breathe...');
+                currentNoteIndex++;
+                currentTimeout = setTimeout(() => {
+                    playNextNote();
+                }, 800); // 800ms breathing pause
+                return;
+            }
+
             const frequency = notes[noteName];
 
             updateNote(noteName);
             updateInfo(`Note ${currentNoteIndex + 1} of ${exercise.notes.length}`);
-
-            // Check if we need a breathing pause (chromatic scale going up)
-            const needsBreath = currentExercise === 'scale' && currentNoteIndex > 0;
-            if (needsBreath) {
-                const prevNoteName = exercise.notes[currentNoteIndex - 1];
-                const prevFrequency = notes[prevNoteName];
-                const isAscending = frequency > prevFrequency;
-
-                if (isAscending) {
-                    updateStatus('Breathe...');
-                    currentTimeout = setTimeout(() => {
-                        updateStatus('Playing...');
-                        const duration = playTone(frequency, exercise.duration);
-                        currentNoteIndex++;
-                        currentTimeout = setTimeout(() => {
-                            playNextNote();
-                        }, duration);
-                    }, 800); // 800ms breathing pause
-                    return;
-                }
-            }
-
             updateStatus('Playing...');
+
             const duration = playTone(frequency, exercise.duration);
 
             currentNoteIndex++;
@@ -500,6 +501,10 @@
             currentNoteIndex = 0;
 
             const exercise = exercises[currentExercise];
+
+            // Generate notes from pattern
+            exercise.notes = generateExerciseNotes(exercise.pattern);
+
             updateInfo(`${exercise.name}`);
             updateStatus('Playing...');
 
