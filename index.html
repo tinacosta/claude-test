@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -24,9 +24,9 @@
         .container {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
+            max-width: 600px;
             width: 100%;
         }
 
@@ -34,24 +34,18 @@
             color: #333;
             margin-bottom: 10px;
             text-align: center;
+            font-size: 24px;
         }
 
         .subtitle {
             text-align: center;
             color: #666;
-            margin-bottom: 30px;
-            font-size: 14px;
+            margin-bottom: 25px;
+            font-size: 13px;
         }
 
         .exercise-selector {
-            margin-bottom: 30px;
-        }
-
-        .exercise-selector label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
+            margin-bottom: 20px;
         }
 
         .exercise-selector select {
@@ -61,138 +55,59 @@
             border-radius: 8px;
             font-size: 16px;
             background: white;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
-
-        .exercise-selector select:hover {
-            border-color: #667eea;
-        }
-
-        .exercise-info {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-
-        .exercise-info h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-
-        .exercise-info p {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 8px;
-        }
-
-        .exercise-info .tradition {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-top: 8px;
         }
 
         .display-area {
             background: #1a1a2e;
             color: white;
-            padding: 40px;
+            padding: 30px;
             border-radius: 12px;
-            margin-bottom: 30px;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .current-note {
-            font-size: 72px;
-            font-weight: 700;
             margin-bottom: 20px;
-            color: #ffd700;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-
-        .breathing-cue {
-            font-size: 24px;
-            color: #4CAF50;
-            margin-bottom: 15px;
-            font-weight: 600;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .vowel-phrase {
-            font-size: 28px;
-            color: #87CEEB;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        .pattern-display {
-            font-size: 18px;
-            color: #ddd;
-            margin-top: 15px;
+            min-height: 200px;
             text-align: center;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #2a2a3e;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 20px;
+        .current-note {
+            font-size: 60px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #ffd700;
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #ffd700);
-            width: 0%;
-            transition: width 0.3s ease;
+        .info {
+            font-size: 18px;
+            color: #87CEEB;
+            margin: 10px 0;
+        }
+
+        .status {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 10px;
         }
 
         .controls {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
         button {
-            padding: 15px 30px;
+            padding: 15px 25px;
             font-size: 16px;
             font-weight: 600;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
             color: white;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        button:active {
-            transform: translateY(0);
+            min-width: 120px;
         }
 
         button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
         }
 
         .btn-start {
@@ -203,36 +118,21 @@
             background: linear-gradient(135deg, #ff9800, #f57c00);
         }
 
-        .btn-restart {
-            background: linear-gradient(135deg, #2196F3, #1976D2);
-        }
-
-        .status-text {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-top: 10px;
+        .btn-stop {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
         }
 
         .tempo-control {
             margin-bottom: 20px;
-        }
-
-        .tempo-control label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
             text-align: center;
         }
 
-        .tempo-control input[type="range"] {
+        .tempo-control input {
             width: 100%;
-            margin-bottom: 5px;
+            margin: 10px 0;
         }
 
         .tempo-value {
-            text-align: center;
             color: #667eea;
             font-weight: 600;
         }
@@ -241,642 +141,228 @@
 <body>
     <div class="container">
         <h1>🎵 Soprano Ornamentation Exercises</h1>
-        <p class="subtitle">Advanced Vocal Training • C4 to D6 Range</p>
+        <p class="subtitle">C4 to D6 Range • Tap Start to Begin</p>
 
         <div class="exercise-selector">
-            <label for="exercise-select">Choose Exercise:</label>
             <select id="exercise-select">
-                <option value="0">Baroque Trill - Italian Style</option>
-                <option value="1">Bel Canto Portamento</option>
-                <option value="2">Coloratura Run - Ascending/Descending</option>
-                <option value="3">Messa di Voce with Turn</option>
-                <option value="4">Appoggiatura Sequence</option>
-                <option value="5">Jazz Scoop and Fall</option>
-                <option value="6">French Ornamental Grace Notes</option>
-                <option value="7">German Lieder Mordent</option>
-                <option value="8">Spanish Melisma</option>
-                <option value="9">Staccato Pearls (Perlen)</option>
+                <option value="scale">Simple Scale (C4-D6-A3)</option>
+                <option value="trill">Baroque Trill</option>
+                <option value="run">Coloratura Run</option>
+                <option value="portamento">Bel Canto Portamento</option>
             </select>
         </div>
 
-        <div class="exercise-info" id="exercise-info">
-            <h3 id="exercise-title">Baroque Trill - Italian Style</h3>
-            <p id="exercise-description"></p>
-            <span class="tradition" id="exercise-tradition"></span>
-        </div>
-
         <div class="tempo-control">
-            <label for="tempo-slider">Tempo: <span class="tempo-value" id="tempo-value">60 BPM</span></label>
-            <input type="range" id="tempo-slider" min="40" max="120" value="60" step="5">
+            <div>Tempo: <span class="tempo-value" id="tempo-value">80 BPM</span></div>
+            <input type="range" id="tempo-slider" min="60" max="140" value="80" step="10">
         </div>
 
         <div class="display-area">
-            <div class="breathing-cue" id="breathing-cue">Ready to begin</div>
             <div class="current-note" id="current-note">—</div>
-            <div class="vowel-phrase" id="vowel-phrase">Select an exercise to start</div>
-            <div class="pattern-display" id="pattern-display"></div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
+            <div class="info" id="info-text">Select exercise and tap Start</div>
+            <div class="status" id="status-text">Ready</div>
         </div>
 
         <div class="controls">
             <button class="btn-start" id="btn-start">Start Exercise</button>
             <button class="btn-pause" id="btn-pause" disabled>Pause</button>
-            <button class="btn-restart" id="btn-restart" disabled>Restart</button>
+            <button class="btn-stop" id="btn-stop" disabled>Stop</button>
         </div>
-
-        <div class="status-text" id="status-text">Loading audio library...</div>
     </div>
 
-    <!-- Load Tone.js from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"
-            onerror="document.getElementById('status-text').textContent='Failed to load audio library. Please check your internet connection and refresh.'; alert('Audio library failed to load. Please:\n1. Check your internet connection\n2. Refresh the page\n3. Try a different network');"></script>
-
     <script>
-        // Check if Tone.js loaded successfully
-        if (typeof Tone === 'undefined') {
-            document.getElementById('status-text').textContent = 'Audio library not loaded. Please refresh.';
-            alert('Tone.js failed to load. Please check your internet connection and refresh the page.');
-        } else {
-            console.log('Tone.js loaded successfully, version:', Tone.version);
-            document.getElementById('status-text').textContent = 'Select an exercise and press Start';
-        }
-
-        // Tone.js Setup
-        let synth;
-        let currentExerciseIndex = 0;
+        // Simple Web Audio API implementation for mobile compatibility
+        let audioContext = null;
         let isPlaying = false;
         let isPaused = false;
-        let currentStep = 0;
-        let animationFrame;
-        let currentTimeout;
-        let tempo = 60; // BPM
+        let currentTimeout = null;
+        let tempo = 80;
+        let currentNoteIndex = 0;
+        let currentExercise = 'scale';
 
-        // Initialize synth
-        function initializeSynth() {
-            if (!synth) {
-                if (typeof Tone === 'undefined') {
-                    console.error('Tone.js not loaded!');
-                    return;
-                }
-                synth = new Tone.Synth({
-                    oscillator: {
-                        type: 'sine'
-                    },
-                    envelope: {
-                        attack: 0.05,
-                        decay: 0.1,
-                        sustain: 0.8,
-                        release: 0.1
-                    },
-                    volume: -6  // Increase volume for mobile devices
-                }).toDestination();
-                console.log('Synth created with volume:', synth.volume.value);
-            }
-        }
-
-        // Soprano range: A3 (220Hz) to D6 (1174.66Hz)
-        // Starting from C4 (261.63Hz) to D6 (1174.66Hz), then down to A3 (220Hz)
-
-        const noteFrequencies = {
-            'A3': 220.00, 'A#3': 233.08, 'B3': 246.94,
-            'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13, 'E4': 329.63,
-            'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'G#4': 415.30, 'A4': 440.00,
-            'A#4': 466.16, 'B4': 493.88,
-            'C5': 523.25, 'C#5': 554.37, 'D5': 587.33, 'D#5': 622.25, 'E5': 659.25,
-            'F5': 698.46, 'F#5': 739.99, 'G5': 783.99, 'G#5': 830.61, 'A5': 880.00,
-            'A#5': 932.33, 'B5': 987.77,
-            'C6': 1046.50, 'C#6': 1108.73, 'D6': 1174.66
+        // Note frequencies
+        const notes = {
+            'A3': 220.00, 'B3': 246.94,
+            'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23, 'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+            'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 'G5': 783.99, 'A5': 880.00, 'B5': 987.77,
+            'C6': 1046.50, 'D6': 1174.66
         };
 
-        // Exercise definitions with ornamentation patterns
-        const exercises = [
-            {
-                name: "Baroque Trill - Italian Style",
-                tradition: "Baroque • Italian",
-                description: "Classic upper-neighbor trill starting slowly and accelerating. Emphasize clarity and evenness.",
-                vowels: ["i", "e", "a"],
-                breathingPattern: [4, 4, 4, 4], // bars between breaths
-                ornamentPattern: (baseNote) => {
-                    // Trill pattern: base -> upper -> base -> upper (accelerating)
-                    const base = baseNote;
-                    const upper = getNoteAbove(base, 2); // whole step
-                    return [
-                        { note: base, duration: 0.25 },
-                        { note: upper, duration: 0.25 },
-                        { note: base, duration: 0.2 },
-                        { note: upper, duration: 0.2 },
-                        { note: base, duration: 0.15 },
-                        { note: upper, duration: 0.15 },
-                        { note: base, duration: 0.3 }
-                    ];
-                }
+        // Exercise patterns
+        const exercises = {
+            scale: {
+                name: 'Simple Scale',
+                notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6',
+                       'C6', 'B5', 'A5', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'B3', 'A3'],
+                duration: 0.5
             },
-            {
-                name: "Bel Canto Portamento",
-                tradition: "Bel Canto • Italian Opera",
-                description: "Smooth gliding between notes with connected tone. Focus on seamless legato.",
-                vowels: ["o", "u", "a"],
-                breathingPattern: [3, 3, 3, 3],
-                ornamentPattern: (baseNote) => {
-                    const third = getNoteAbove(baseNote, 4);
-                    const fifth = getNoteAbove(baseNote, 7);
-                    return [
-                        { note: baseNote, duration: 0.5, glide: true },
-                        { note: third, duration: 0.5, glide: true },
-                        { note: fifth, duration: 0.5, glide: true },
-                        { note: third, duration: 0.5, glide: true },
-                        { note: baseNote, duration: 0.5 }
-                    ];
-                }
+            trill: {
+                name: 'Baroque Trill',
+                notes: ['C4', 'D4', 'C4', 'D4', 'E4', 'F4', 'E4', 'F4', 'G4', 'A4', 'G4', 'A4',
+                       'B4', 'C5', 'B4', 'C5', 'D5', 'E5', 'D5', 'E5', 'F5', 'G5', 'F5', 'G5',
+                       'A5', 'B5', 'A5', 'B5', 'C6', 'D6', 'C6', 'D6'],
+                duration: 0.3
             },
-            {
-                name: "Coloratura Run - Ascending/Descending",
-                tradition: "Coloratura • Bel Canto",
-                description: "Rapid scale passages requiring agility and precision. Keep throat open and relaxed.",
-                vowels: ["a", "i"],
-                breathingPattern: [2, 2, 2, 2],
-                ornamentPattern: (baseNote) => {
-                    // Fast ascending and descending scale
-                    const pattern = [];
-                    for (let i = 0; i <= 12; i += 2) {
-                        pattern.push({ note: getNoteAbove(baseNote, i), duration: 0.15 });
-                    }
-                    for (let i = 10; i >= 0; i -= 2) {
-                        pattern.push({ note: getNoteAbove(baseNote, i), duration: 0.15 });
-                    }
-                    return pattern;
-                }
+            run: {
+                name: 'Coloratura Run',
+                notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4',
+                       'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4',
+                       'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6'],
+                duration: 0.25
             },
-            {
-                name: "Messa di Voce with Turn",
-                tradition: "Bel Canto",
-                description: "Crescendo-decrescendo on a single note with ornamental turn. Master dynamic control.",
-                vowels: ["a", "e", "o"],
-                breathingPattern: [2, 2, 2, 2],
-                ornamentPattern: (baseNote) => {
-                    const upper = getNoteAbove(baseNote, 2);
-                    const lower = getNoteAbove(baseNote, -2);
-                    return [
-                        { note: baseNote, duration: 0.8, dynamic: 'crescendo' },
-                        { note: upper, duration: 0.15 },
-                        { note: baseNote, duration: 0.15 },
-                        { note: lower, duration: 0.15 },
-                        { note: baseNote, duration: 0.8, dynamic: 'diminuendo' }
-                    ];
-                }
-            },
-            {
-                name: "Appoggiatura Sequence",
-                tradition: "Classical • Baroque",
-                description: "Leaning notes resolving downward. Stress the appoggiatura, release to resolution.",
-                vowels: ["e", "o"],
-                breathingPattern: [4, 4, 4, 4],
-                ornamentPattern: (baseNote) => {
-                    const app1 = getNoteAbove(baseNote, 2);
-                    const app2 = getNoteAbove(baseNote, 4);
-                    return [
-                        { note: app1, duration: 0.3, accent: true },
-                        { note: baseNote, duration: 0.2 },
-                        { note: app2, duration: 0.3, accent: true },
-                        { note: getNoteAbove(baseNote, 2), duration: 0.2 },
-                        { note: baseNote, duration: 0.5 }
-                    ];
-                }
-            },
-            {
-                name: "Jazz Scoop and Fall",
-                tradition: "Jazz • Contemporary",
-                description: "Slide into and out of notes with style. Use vibrato at the peak.",
-                vowels: ["a", "oh", "yeah"],
-                breathingPattern: [3, 3, 3, 3],
-                ornamentPattern: (baseNote) => {
-                    const target = getNoteAbove(baseNote, 5);
-                    return [
-                        { note: getNoteAbove(baseNote, -2), duration: 0.1, glide: true },
-                        { note: baseNote, duration: 0.4, vibrato: true },
-                        { note: target, duration: 0.4, vibrato: true },
-                        { note: getNoteAbove(target, -3), duration: 0.2, glide: true }
-                    ];
-                }
-            },
-            {
-                name: "French Ornamental Grace Notes",
-                tradition: "Baroque • French",
-                description: "Delicate grace notes before main tones. Light and articulate, like Couperin.",
-                vowels: ["i", "u"],
-                breathingPattern: [4, 4, 4, 4],
-                ornamentPattern: (baseNote) => {
-                    return [
-                        { note: getNoteAbove(baseNote, -1), duration: 0.08 },
-                        { note: baseNote, duration: 0.4 },
-                        { note: getNoteAbove(baseNote, 1), duration: 0.08 },
-                        { note: getNoteAbove(baseNote, 2), duration: 0.4 },
-                        { note: getNoteAbove(baseNote, 4), duration: 0.08 },
-                        { note: getNoteAbove(baseNote, 5), duration: 0.4 }
-                    ];
-                }
-            },
-            {
-                name: "German Lieder Mordent",
-                tradition: "Romantic • German",
-                description: "Quick alternation with lower neighbor. Expressive and speech-like.",
-                vowels: ["ä", "ö", "a"],
-                breathingPattern: [3, 3, 3, 3],
-                ornamentPattern: (baseNote) => {
-                    const lower = getNoteAbove(baseNote, -1);
-                    return [
-                        { note: baseNote, duration: 0.2 },
-                        { note: lower, duration: 0.1 },
-                        { note: baseNote, duration: 0.3 },
-                        { note: getNoteAbove(baseNote, 2), duration: 0.2 },
-                        { note: getNoteAbove(baseNote, 1), duration: 0.1 },
-                        { note: getNoteAbove(baseNote, 2), duration: 0.3 }
-                    ];
-                }
-            },
-            {
-                name: "Spanish Melisma",
-                tradition: "Spanish • Folk",
-                description: "Flowing melismatic passages with passion. Channel flamenco ornamentation.",
-                vowels: ["a", "ay", "e"],
-                breathingPattern: [2, 2, 2, 2],
-                ornamentPattern: (baseNote) => {
-                    return [
-                        { note: baseNote, duration: 0.15 },
-                        { note: getNoteAbove(baseNote, 1), duration: 0.1 },
-                        { note: getNoteAbove(baseNote, 3), duration: 0.15 },
-                        { note: getNoteAbove(baseNote, 5), duration: 0.2 },
-                        { note: getNoteAbove(baseNote, 7), duration: 0.15 },
-                        { note: getNoteAbove(baseNote, 5), duration: 0.1 },
-                        { note: getNoteAbove(baseNote, 3), duration: 0.1 },
-                        { note: baseNote, duration: 0.3 }
-                    ];
-                }
-            },
-            {
-                name: "Staccato Pearls (Perlen)",
-                tradition: "Coloratura • Queen of the Night",
-                description: "Brilliant staccato notes like pearls on a string. Light, precise, and dazzling.",
-                vowels: ["a", "i"],
-                breathingPattern: [2, 2, 2, 2],
-                ornamentPattern: (baseNote) => {
-                    const pattern = [];
-                    const intervals = [0, 2, 4, 5, 7, 9, 11, 12];
-                    intervals.forEach(interval => {
-                        pattern.push({ note: getNoteAbove(baseNote, interval), duration: 0.12, staccato: true });
-                    });
-                    intervals.reverse().forEach(interval => {
-                        if (interval !== 12) {
-                            pattern.push({ note: getNoteAbove(baseNote, interval), duration: 0.12, staccato: true });
-                        }
-                    });
-                    return pattern;
-                }
+            portamento: {
+                name: 'Bel Canto Portamento',
+                notes: ['C4', 'E4', 'G4', 'C5', 'G4', 'E4', 'C4',
+                       'D4', 'F4', 'A4', 'D5', 'A4', 'F4', 'D4',
+                       'E5', 'G5', 'B5', 'E5', 'D6', 'B5', 'G5'],
+                duration: 0.6
             }
-        ];
+        };
 
-        // Helper function to get note above base by semitones
-        function getNoteAbove(baseNoteName, semitones) {
-            const noteNames = Object.keys(noteFrequencies);
-            const baseIndex = noteNames.indexOf(baseNoteName);
-            const targetIndex = baseIndex + semitones;
-            if (targetIndex >= 0 && targetIndex < noteNames.length) {
-                return noteNames[targetIndex];
+        // Initialize audio context on user interaction
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                updateStatus('Audio initialized');
             }
-            return baseNoteName;
-        }
-
-        // Generate chromatic scale from C4 to D6 and back to A3
-        function generateExerciseScale() {
-            const noteNames = Object.keys(noteFrequencies);
-            const startIndex = noteNames.indexOf('C4');
-            const peakIndex = noteNames.indexOf('D6');
-            const endIndex = noteNames.indexOf('A3');
-
-            const scale = [];
-
-            // Ascending: C4 to D6
-            for (let i = startIndex; i <= peakIndex; i += 2) { // skip semitones for cleaner progression
-                scale.push(noteNames[i]);
-            }
-
-            // Descending: D6 to A3
-            for (let i = peakIndex - 2; i >= endIndex; i -= 2) {
-                scale.push(noteNames[i]);
-            }
-
-            return scale;
-        }
-
-        // Play a note with Tone.js
-        function playNote(noteName, duration, options = {}) {
-            initializeSynth();
-
-            const noteDuration = duration * (60 / tempo); // Adjust for tempo
-
-            // Adjust synth envelope based on options
-            if (options.staccato) {
-                synth.envelope.attack = 0.01;
-                synth.envelope.release = noteDuration * 0.3;
-            } else if (options.dynamic === 'crescendo' || options.dynamic === 'diminuendo') {
-                synth.envelope.attack = noteDuration * 0.3;
-                synth.envelope.release = noteDuration * 0.3;
-            } else {
-                synth.envelope.attack = 0.05;
-                synth.envelope.release = 0.1;
-            }
-
-            // Play the note - Tone.js accepts note names like "C4"
-            try {
-                synth.triggerAttackRelease(noteName, noteDuration);
-            } catch (error) {
-                console.error('Error playing note:', noteName, error);
-            }
-
-            return noteDuration * 1000; // Return duration in milliseconds
-        }
-
-        // Play glide between notes using Tone.js
-        function playGlide(startNote, endNote, duration) {
-            initializeSynth();
-
-            const glideDuration = duration * (60 / tempo);
-            const now = Tone.now();
-
-            try {
-                // Trigger note
-                synth.triggerAttack(startNote, now);
-
-                // Glide to end note
-                synth.frequency.rampTo(endNote, glideDuration, now);
-
-                // Release after duration
-                synth.triggerRelease(now + glideDuration);
-            } catch (error) {
-                console.error('Error playing glide:', startNote, endNote, error);
-            }
-
-            return glideDuration * 1000;
-        }
-
-        // Main exercise execution
-        let exerciseScale = [];
-        let currentScaleIndex = 0;
-        let patternStepIndex = 0;
-        let currentPattern = [];
-        let breathCounter = 0;
-
-        function startExercise() {
-            try {
-                // Check if Tone.js is loaded
-                if (typeof Tone === 'undefined') {
-                    alert('Audio library not loaded. Please refresh the page and make sure you have an internet connection.');
-                    document.getElementById('status-text').textContent = 'Audio library missing - please refresh';
-                    return;
-                }
-
-                console.log('Starting exercise...');
-                document.getElementById('status-text').textContent = 'Initializing audio...';
-
-                // Initialize synth first (must be synchronous on iOS)
-                initializeSynth();
-                console.log('Synth initialized');
-
-                // Start Tone.js audio context
-                Tone.start().then(() => {
-                    console.log('Tone.js started successfully');
-                    document.getElementById('status-text').textContent = 'Audio ready - starting exercise...';
-
-                    if (isPaused) {
-                        isPaused = false;
-                        isPlaying = true;
-                        updateUI();
-                        continueExercise();
-                        return;
-                    }
-
-                    isPlaying = true;
-                    isPaused = false;
-                    currentScaleIndex = 0;
-                    patternStepIndex = 0;
-                    breathCounter = 0;
-
-                    exerciseScale = generateExerciseScale();
-                    console.log('Exercise scale generated:', exerciseScale.length, 'notes');
-
-                    updateUI();
-                    console.log('Starting playback...');
-
-                    // Play a test note immediately to verify audio works
-                    document.getElementById('status-text').textContent = 'Playing test note...';
-                    playNote('C4', 0.5, {});
-
-                    // Start the actual exercise after a short delay
-                    setTimeout(() => {
-                        document.getElementById('status-text').textContent = 'Exercise in progress...';
-                        playExerciseStep();
-                    }, 600);
-                }).catch(error => {
-                    console.error('Tone.start() failed:', error);
-                    document.getElementById('status-text').textContent = 'Audio failed - please try again';
-                    alert('Could not start audio. This may be due to browser restrictions.\n\nTry:\n1. Refreshing the page\n2. Increasing your volume\n3. Using headphones\n4. Trying a different browser');
-                });
-
-            } catch (error) {
-                console.error('Error starting exercise:', error);
-                document.getElementById('status-text').textContent = 'Error: ' + error.message;
-                alert('Error: ' + error.message);
+            // Resume if suspended (iOS requirement)
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
             }
         }
 
-        function playExerciseStep() {
-            if (!isPlaying || isPaused) {
-                console.log('Playback stopped - isPlaying:', isPlaying, 'isPaused:', isPaused);
+        // Play a single note
+        function playTone(frequency, duration) {
+            if (!audioContext) return duration * 1000;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+
+            const now = audioContext.currentTime;
+            const noteDuration = duration * (60 / tempo);
+
+            // Simple envelope
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.3, now + 0.02);
+            gainNode.gain.linearRampToValueAtTime(0.25, now + noteDuration - 0.05);
+            gainNode.gain.linearRampToValueAtTime(0, now + noteDuration);
+
+            oscillator.start(now);
+            oscillator.stop(now + noteDuration);
+
+            return noteDuration * 1000;
+        }
+
+        // Play next note in sequence
+        function playNextNote() {
+            if (!isPlaying || isPaused) return;
+
+            const exercise = exercises[currentExercise];
+
+            if (currentNoteIndex >= exercise.notes.length) {
+                stopExercise();
+                updateStatus('Exercise complete!');
+                updateNote('✓');
+                updateInfo('Well done!');
                 return;
             }
 
-            console.log('Playing step - scale index:', currentScaleIndex, 'pattern index:', patternStepIndex);
+            const noteName = exercise.notes[currentNoteIndex];
+            const frequency = notes[noteName];
 
-            const exercise = exercises[currentExerciseIndex];
+            updateNote(noteName);
+            updateInfo(`Note ${currentNoteIndex + 1} of ${exercise.notes.length}`);
+            updateStatus('Playing...');
 
-            // Check if we need to breathe
-            if (currentScaleIndex > 0 && currentScaleIndex % exercise.breathingPattern[0] === 0 && patternStepIndex === 0) {
-                console.log('Breathing pause');
-                showBreathingCue();
-                currentTimeout = setTimeout(() => {
-                    continueExercise();
-                }, 2000); // 2 second breathing pause
-                return;
-            }
+            const duration = playTone(frequency, exercise.duration);
 
-            // Get current base note
-            const baseNote = exerciseScale[currentScaleIndex];
+            currentNoteIndex++;
 
-            // Generate ornamentation pattern for this note
-            if (patternStepIndex === 0) {
-                currentPattern = exercise.ornamentPattern(baseNote);
-                updateVowelDisplay(exercise);
-                console.log('New pattern for', baseNote, ':', currentPattern.map(s => s.note).join(' → '));
-            }
-
-            // Play current step in pattern
-            const step = currentPattern[patternStepIndex];
-            const noteName = step.note;
-            console.log('Playing note:', noteName, 'duration:', step.duration);
-
-            // Update display
-            document.getElementById('current-note').textContent = noteName;
-            document.getElementById('pattern-display').textContent =
-                `Pattern: ${currentPattern.map(s => s.note).join(' → ')}`;
-
-            // Update progress
-            const progress = ((currentScaleIndex * currentPattern.length + patternStepIndex) /
-                             (exerciseScale.length * currentPattern.length)) * 100;
-            document.getElementById('progress-fill').style.width = progress + '%';
-
-            let playDuration;
-
-            if (step.glide && patternStepIndex < currentPattern.length - 1) {
-                const nextStep = currentPattern[patternStepIndex + 1];
-                const nextNoteName = nextStep.note;
-                playDuration = playGlide(noteName, nextNoteName, step.duration);
-            } else {
-                playDuration = playNote(noteName, step.duration, step);
-            }
-
-            // Move to next step
-            patternStepIndex++;
-
-            if (patternStepIndex >= currentPattern.length) {
-                patternStepIndex = 0;
-                currentScaleIndex++;
-
-                if (currentScaleIndex >= exerciseScale.length) {
-                    // Exercise complete
-                    completeExercise();
-                    return;
-                }
-            }
-
-            // Schedule next step
             currentTimeout = setTimeout(() => {
-                playExerciseStep();
-            }, playDuration);
+                playNextNote();
+            }, duration);
         }
 
-        function continueExercise() {
-            if (isPlaying && !isPaused) {
-                hideBreathingCue();
-                playExerciseStep();
+        // Start exercise
+        function startExercise() {
+            initAudio();
+
+            if (isPaused) {
+                isPaused = false;
+                isPlaying = true;
+                updateButtons();
+                playNextNote();
+                return;
             }
+
+            isPlaying = true;
+            isPaused = false;
+            currentNoteIndex = 0;
+
+            const exercise = exercises[currentExercise];
+            updateInfo(`Starting: ${exercise.name}`);
+            updateStatus('Playing...');
+
+            updateButtons();
+            playNextNote();
         }
 
-        function showBreathingCue() {
-            const cueElement = document.getElementById('breathing-cue');
-            cueElement.textContent = '💨 BREATHE';
-            cueElement.style.display = 'block';
-            cueElement.style.animation = 'pulse 1s infinite';
-        }
-
-        function hideBreathingCue() {
-            const cueElement = document.getElementById('breathing-cue');
-            cueElement.style.display = 'none';
-        }
-
-        function updateVowelDisplay(exercise) {
-            const vowel = exercise.vowels[Math.floor(Math.random() * exercise.vowels.length)];
-            document.getElementById('vowel-phrase').textContent = `Vowel: [${vowel}]`;
-        }
-
+        // Pause exercise
         function pauseExercise() {
             isPaused = true;
             isPlaying = false;
-            clearTimeout(currentTimeout);
-            updateUI();
-            document.getElementById('status-text').textContent = 'Exercise paused';
+            if (currentTimeout) clearTimeout(currentTimeout);
+            updateStatus('Paused');
+            updateButtons();
         }
 
-        function restartExercise() {
-            isPaused = false;
-            isPlaying = false;
-            clearTimeout(currentTimeout);
-            currentScaleIndex = 0;
-            patternStepIndex = 0;
-            breathCounter = 0;
-
-            document.getElementById('current-note').textContent = '—';
-            document.getElementById('vowel-phrase').textContent = 'Restarting...';
-            document.getElementById('progress-fill').style.width = '0%';
-
-            updateUI();
-
-            setTimeout(() => {
-                startExercise();
-            }, 500);
-        }
-
-        function completeExercise() {
+        // Stop exercise
+        function stopExercise() {
             isPlaying = false;
             isPaused = false;
-            document.getElementById('status-text').textContent = 'Exercise complete! Well done!';
-            document.getElementById('current-note').textContent = '✓';
-            document.getElementById('vowel-phrase').textContent = 'Excellent work!';
-            document.getElementById('progress-fill').style.width = '100%';
-            updateUI();
+            if (currentTimeout) clearTimeout(currentTimeout);
+            currentNoteIndex = 0;
+            updateNote('—');
+            updateStatus('Stopped');
+            updateInfo('Select exercise and tap Start');
+            updateButtons();
         }
 
-        function updateUI() {
-            const btnStart = document.getElementById('btn-start');
-            const btnPause = document.getElementById('btn-pause');
-            const btnRestart = document.getElementById('btn-restart');
-
-            if (isPlaying) {
-                btnStart.disabled = true;
-                btnPause.disabled = false;
-                btnRestart.disabled = false;
-                btnPause.textContent = 'Pause';
-                document.getElementById('status-text').textContent = 'Exercise in progress...';
-            } else if (isPaused) {
-                btnStart.disabled = false;
-                btnStart.textContent = 'Resume';
-                btnPause.disabled = true;
-                btnRestart.disabled = false;
-                document.getElementById('status-text').textContent = 'Exercise paused';
-            } else {
-                btnStart.disabled = false;
-                btnStart.textContent = 'Start Exercise';
-                btnPause.disabled = true;
-                btnRestart.disabled = true;
-            }
+        // Update UI
+        function updateNote(note) {
+            document.getElementById('current-note').textContent = note;
         }
 
-        function updateExerciseInfo() {
-            const exercise = exercises[currentExerciseIndex];
-            document.getElementById('exercise-title').textContent = exercise.name;
-            document.getElementById('exercise-description').textContent = exercise.description;
-            document.getElementById('exercise-tradition').textContent = exercise.tradition;
-
-            if (!isPlaying && !isPaused) {
-                document.getElementById('vowel-phrase').textContent = `Vowels: ${exercise.vowels.join(', ')}`;
-                document.getElementById('current-note').textContent = '—';
-                document.getElementById('pattern-display').textContent = '';
-            }
+        function updateInfo(text) {
+            document.getElementById('info-text').textContent = text;
         }
 
-        // Event Listeners
+        function updateStatus(text) {
+            document.getElementById('status-text').textContent = text;
+        }
+
+        function updateButtons() {
+            document.getElementById('btn-start').disabled = isPlaying;
+            document.getElementById('btn-pause').disabled = !isPlaying;
+            document.getElementById('btn-stop').disabled = !isPlaying && !isPaused;
+        }
+
+        // Event listeners
         document.getElementById('btn-start').addEventListener('click', startExercise);
         document.getElementById('btn-pause').addEventListener('click', pauseExercise);
-        document.getElementById('btn-restart').addEventListener('click', restartExercise);
+        document.getElementById('btn-stop').addEventListener('click', stopExercise);
 
         document.getElementById('exercise-select').addEventListener('change', (e) => {
-            if (isPlaying) {
-                pauseExercise();
-            }
-            currentExerciseIndex = parseInt(e.target.value);
-            updateExerciseInfo();
-            document.getElementById('status-text').textContent = 'Exercise changed. Press Start when ready.';
+            currentExercise = e.target.value;
+            stopExercise();
+            const exercise = exercises[currentExercise];
+            updateInfo(`Selected: ${exercise.name}`);
         });
 
         document.getElementById('tempo-slider').addEventListener('input', (e) => {
@@ -885,8 +371,7 @@
         });
 
         // Initialize
-        updateExerciseInfo();
-        updateUI();
+        updateButtons();
     </script>
 </body>
 </html>
