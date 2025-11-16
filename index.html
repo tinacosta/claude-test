@@ -311,10 +311,12 @@
                     envelope: {
                         attack: 0.05,
                         decay: 0.1,
-                        sustain: 0.3,
+                        sustain: 0.8,
                         release: 0.1
-                    }
+                    },
+                    volume: -6  // Increase volume for mobile devices
                 }).toDestination();
+                console.log('Synth created with volume:', synth.volume.value);
             }
         }
 
@@ -610,40 +612,59 @@
         let currentPattern = [];
         let breathCounter = 0;
 
-        async function startExercise() {
+        function startExercise() {
             try {
                 console.log('Starting exercise...');
+                document.getElementById('status-text').textContent = 'Initializing audio...';
 
-                // Start Tone.js audio context (required by browser autoplay policies)
-                await Tone.start();
-                console.log('Tone.js started successfully');
-
+                // Initialize synth first (must be synchronous on iOS)
                 initializeSynth();
                 console.log('Synth initialized');
 
-                if (isPaused) {
-                    isPaused = false;
+                // Start Tone.js audio context
+                Tone.start().then(() => {
+                    console.log('Tone.js started successfully');
+                    document.getElementById('status-text').textContent = 'Audio ready - starting exercise...';
+
+                    if (isPaused) {
+                        isPaused = false;
+                        isPlaying = true;
+                        updateUI();
+                        continueExercise();
+                        return;
+                    }
+
                     isPlaying = true;
+                    isPaused = false;
+                    currentScaleIndex = 0;
+                    patternStepIndex = 0;
+                    breathCounter = 0;
+
+                    exerciseScale = generateExerciseScale();
+                    console.log('Exercise scale generated:', exerciseScale.length, 'notes');
+
                     updateUI();
-                    continueExercise();
-                    return;
-                }
+                    console.log('Starting playback...');
 
-                isPlaying = true;
-                isPaused = false;
-                currentScaleIndex = 0;
-                patternStepIndex = 0;
-                breathCounter = 0;
+                    // Play a test note immediately to verify audio works
+                    document.getElementById('status-text').textContent = 'Playing test note...';
+                    playNote('C4', 0.5, {});
 
-                exerciseScale = generateExerciseScale();
-                console.log('Exercise scale generated:', exerciseScale.length, 'notes');
+                    // Start the actual exercise after a short delay
+                    setTimeout(() => {
+                        document.getElementById('status-text').textContent = 'Exercise in progress...';
+                        playExerciseStep();
+                    }, 600);
+                }).catch(error => {
+                    console.error('Tone.start() failed:', error);
+                    document.getElementById('status-text').textContent = 'Audio failed - please try again';
+                    alert('Could not start audio. This may be due to browser restrictions.\n\nTry:\n1. Refreshing the page\n2. Increasing your volume\n3. Using headphones\n4. Trying a different browser');
+                });
 
-                updateUI();
-                console.log('Starting playback...');
-                playExerciseStep();
             } catch (error) {
                 console.error('Error starting exercise:', error);
-                alert('Error starting audio: ' + error.message + '\n\nPlease check the browser console for details.');
+                document.getElementById('status-text').textContent = 'Error: ' + error.message;
+                alert('Error: ' + error.message);
             }
         }
 
