@@ -130,6 +130,14 @@
             border-radius: 8px;
         }
 
+        .primer-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
         .guidance-label {
             font-size: 12px;
             font-weight: 700;
@@ -137,6 +145,22 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 5px;
+        }
+
+        .primer-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ff9800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .primer-text {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            font-family: 'Courier New', monospace;
         }
 
         .syllables {
@@ -175,7 +199,7 @@
 
         <div class="exercise-selector">
             <select id="exercise-select">
-                <option value="scale">Simple Scale (C4-D6-D3)</option>
+                <option value="scale">Chromatic Scale (C4-D6-D3)</option>
                 <option value="trill">Baroque Trill - Italian Style</option>
                 <option value="portamento">Bel Canto Portamento</option>
                 <option value="run">Coloratura Run</option>
@@ -187,6 +211,11 @@
                 <option value="melisma">Spanish Melisma</option>
                 <option value="staccato">Staccato Pearls (Perlen)</option>
             </select>
+        </div>
+
+        <div class="primer-box">
+            <div class="primer-label">Exercise Pattern</div>
+            <div class="primer-text" id="primer-text">Chromatic scale: 1, ♯1/♭2, 2, ♯2/♭3, 3, 4, ♯4/♭5, 5, ♯5/♭6, 6, ♯6/♭7, 7, 8... Ascending by half steps with breath between each step, then descending.</div>
         </div>
 
         <div class="guidance-box">
@@ -240,12 +269,17 @@
         // Exercise patterns
         const exercises = {
             scale: {
-                name: 'Simple Scale',
-                notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6',
-                       'C6', 'B5', 'A5', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'B3', 'A3', 'G3', 'F3', 'E3', 'D3'],
+                name: 'Chromatic Scale',
+                notes: ['C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4',
+                       'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5', 'G#5', 'A5', 'A#5', 'B5',
+                       'C6', 'C#6', 'D6',
+                       'C#6', 'C6', 'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5',
+                       'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4',
+                       'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3'],
                 duration: 0.5,
                 syllables: ['ma', 'me', 'mi', 'mo', 'mu'],
-                technique: 'Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.'
+                technique: 'Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.',
+                primer: 'Chromatic scale: 1, ♯1/♭2, 2, ♯2/♭3, 3, 4, ♯4/♭5, 5, ♯5/♭6, 6, ♯6/♭7, 7, 8... Ascending by half steps with breath between each step, then descending.'
             },
             trill: {
                 name: 'Baroque Trill - Italian Style',
@@ -254,7 +288,8 @@
                        'A5', 'B5', 'A5', 'B5', 'C6', 'D6', 'C6', 'D6'],
                 duration: 0.3,
                 syllables: ['i', 'e', 'a'],
-                technique: 'Classic upper-neighbor trill starting slowly and accelerating. Emphasize clarity and evenness. Keep the throat free and let rapid motion come from the vocal cords.'
+                technique: 'Classic upper-neighbor trill starting slowly and accelerating. Emphasize clarity and evenness. Keep the throat free and let rapid motion come from the vocal cords.',
+                primer: 'Upper-neighbor trill: 1-2-1-2, then move up a step. Pattern: do-re-do-re, mi-fa-mi-fa, sol-la-sol-la...'
             },
             portamento: {
                 name: 'Bel Canto Portamento',
@@ -263,7 +298,8 @@
                        'E5', 'G5', 'B5', 'E5', 'D6', 'B5', 'G5'],
                 duration: 0.6,
                 syllables: ['o', 'u', 'a'],
-                technique: 'Smooth gliding between notes with connected tone. Focus on seamless legato. Imagine a ribbon of sound connecting each note without breaks.'
+                technique: 'Smooth gliding between notes with connected tone. Focus on seamless legato. Imagine a ribbon of sound connecting each note without breaks.',
+                primer: 'Arpeggios with smooth connection: 1-3-5-8-5-3-1. Major triads ascending through range (do-mi-sol-do...)'
             },
             run: {
                 name: 'Coloratura Run',
@@ -272,7 +308,8 @@
                        'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6'],
                 duration: 0.22,
                 syllables: ['a', 'i'],
-                technique: 'Rapid scale passages requiring agility and precision. Keep throat open and relaxed. Each note clear but connected like pearls on a string.'
+                technique: 'Rapid scale passages requiring agility and precision. Keep throat open and relaxed. Each note clear but connected like pearls on a string.',
+                primer: 'Fast diatonic runs: ascending 1-2-3-4-5-6-7-8, then descending, then ascending higher. Major scale patterns (do-re-mi-fa-sol-la-ti-do)'
             },
             messa: {
                 name: 'Messa di Voce with Turn',
@@ -285,7 +322,8 @@
                        'D6', 'C6', 'D6', 'C6', 'D6'],
                 duration: 0.45,
                 syllables: ['a', 'e', 'o'],
-                technique: 'Crescendo-decrescendo on sustained notes with ornamental turn. Master dynamic control while maintaining steady breath support. Expand then diminish the tone smoothly.'
+                technique: 'Crescendo-decrescendo on sustained notes with ornamental turn. Master dynamic control while maintaining steady breath support. Expand then diminish the tone smoothly.',
+                primer: 'Turn around main note: 1-2-1-♭7-1. Pattern on each scale degree with dynamic swell (do-re-do-ti-do with crescendo-diminuendo)'
             },
             appoggiatura: {
                 name: 'Appoggiatura Sequence',
@@ -294,7 +332,8 @@
                        'B5', 'A5', 'D6', 'C6'],
                 duration: 0.4,
                 syllables: ['e', 'o'],
-                technique: 'Leaning notes resolving downward. Stress the appoggiatura with a slight accent, then release smoothly to the resolution. Express the tension and release.'
+                technique: 'Leaning notes resolving downward. Stress the appoggiatura with a slight accent, then release smoothly to the resolution. Express the tension and release.',
+                primer: 'Leaning note resolution: 2-1, 4-3, 6-5, 8-7... Each dissonance resolves down by step (re-do, fa-mi, la-sol...)'
             },
             jazz: {
                 name: 'Jazz Scoop and Fall',
@@ -304,7 +343,8 @@
                        'E5', 'G5', 'B5', 'D6', 'B5'],
                 duration: 0.5,
                 syllables: ['a', 'oh', 'yeah'],
-                technique: 'Slide into and out of notes with style. Use vibrato at the peak. Channel the freedom and expressiveness of jazz phrasing.'
+                technique: 'Slide into and out of notes with style. Use vibrato at the peak. Channel the freedom and expressiveness of jazz phrasing.',
+                primer: 'Scoop up to chord tones: 6-1-3-5-3, 7-2-4-6-4... Glide into arpeggios with fall-offs (la-do-mi-sol-mi with slides)'
             },
             french: {
                 name: 'French Ornamental Grace Notes',
@@ -315,7 +355,8 @@
                        'A5', 'B5', 'C6', 'D6'],
                 duration: 0.35,
                 syllables: ['i', 'u'],
-                technique: 'Delicate grace notes before main tones. Light and articulate, like Couperin. Quick and elegant with refined articulation.'
+                technique: 'Delicate grace notes before main tones. Light and articulate, like Couperin. Quick and elegant with refined articulation.',
+                primer: 'Grace note before main note: ♭7-1, 2-3, 4-5... Quick ornamental approach from below (ti-do, re-mi, fa-sol...)'
             },
             mordent: {
                 name: 'German Lieder Mordent',
@@ -325,7 +366,8 @@
                        'B5', 'A5', 'B5', 'D6', 'C6', 'D6'],
                 duration: 0.35,
                 syllables: ['ä', 'ö', 'a'],
-                technique: 'Quick alternation with lower neighbor. Expressive and speech-like. Channel the emotional depth of German Romantic song.'
+                technique: 'Quick alternation with lower neighbor. Expressive and speech-like. Channel the emotional depth of German Romantic song.',
+                primer: 'Lower-neighbor mordent: 1-♭7-1, 3-2-3, 5-4-5, 8-7-8... Main note with quick dip below (do-ti-do, mi-re-mi...)'
             },
             melisma: {
                 name: 'Spanish Melisma',
@@ -334,7 +376,8 @@
                        'G5', 'A5', 'B5', 'D6', 'B5', 'A5', 'G5'],
                 duration: 0.28,
                 syllables: ['a', 'ay', 'e'],
-                technique: 'Flowing melismatic passages with passion. Channel flamenco ornamentation. Let the notes cascade with energy and expression.'
+                technique: 'Flowing melismatic passages with passion. Channel flamenco ornamentation. Let the notes cascade with energy and expression.',
+                primer: 'Flowing scale fragments: 1-2-3-5-6-5-3-1... Cascading patterns ascending through range (do-re-mi-sol-la-sol-mi-do)'
             },
             staccato: {
                 name: 'Staccato Pearls (Perlen)',
@@ -342,7 +385,8 @@
                        'C6', 'A5', 'F5', 'D5', 'B4', 'G4', 'E4', 'C4'],
                 duration: 0.2,
                 syllables: ['a', 'i'],
-                technique: 'Brilliant staccato notes like pearls on a string. Light, precise, and dazzling. Think Queen of the Night - each note sparkles individually.'
+                technique: 'Brilliant staccato notes like pearls on a string. Light, precise, and dazzling. Think Queen of the Night - each note sparkles individually.',
+                primer: 'Staccato arpeggios: 1-3-5-7-9-11-13-15... Ascending thirds with brilliant articulation (do-mi-sol-ti-re-fa-la-do-re)'
             }
         };
 
@@ -407,8 +451,29 @@
 
             updateNote(noteName);
             updateInfo(`Note ${currentNoteIndex + 1} of ${exercise.notes.length}`);
-            updateStatus('Playing...');
 
+            // Check if we need a breathing pause (chromatic scale going up)
+            const needsBreath = currentExercise === 'scale' && currentNoteIndex > 0;
+            if (needsBreath) {
+                const prevNoteName = exercise.notes[currentNoteIndex - 1];
+                const prevFrequency = notes[prevNoteName];
+                const isAscending = frequency > prevFrequency;
+
+                if (isAscending) {
+                    updateStatus('Breathe...');
+                    currentTimeout = setTimeout(() => {
+                        updateStatus('Playing...');
+                        const duration = playTone(frequency, exercise.duration);
+                        currentNoteIndex++;
+                        currentTimeout = setTimeout(() => {
+                            playNextNote();
+                        }, duration);
+                    }, 800); // 800ms breathing pause
+                    return;
+                }
+            }
+
+            updateStatus('Playing...');
             const duration = playTone(frequency, exercise.duration);
 
             currentNoteIndex++;
@@ -488,6 +553,11 @@
             document.getElementById('technique-text').textContent = exercise.technique;
         }
 
+        function updatePrimer() {
+            const exercise = exercises[currentExercise];
+            document.getElementById('primer-text').textContent = exercise.primer;
+        }
+
         // Event listeners
         document.getElementById('btn-start').addEventListener('click', startExercise);
         document.getElementById('btn-pause').addEventListener('click', pauseExercise);
@@ -499,6 +569,7 @@
             const exercise = exercises[currentExercise];
             updateInfo(`Selected: ${exercise.name}`);
             updateGuidance();
+            updatePrimer();
         });
 
         document.getElementById('tempo-slider').addEventListener('input', (e) => {
@@ -509,6 +580,7 @@
         // Initialize
         updateButtons();
         updateGuidance();
+        updatePrimer();
     </script>
 </body>
 </html>
