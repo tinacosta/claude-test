@@ -229,8 +229,8 @@
         </div>
 
         <div class="tempo-control">
-            <div>Tempo: <span class="tempo-value" id="tempo-value">80 BPM</span></div>
-            <input type="range" id="tempo-slider" min="60" max="140" value="80" step="10">
+            <div>Tempo: <span class="tempo-value" id="tempo-value">60 BPM</span></div>
+            <input type="range" id="tempo-slider" min="60" max="140" value="60" step="10">
         </div>
 
         <div class="display-area">
@@ -252,7 +252,7 @@
         let isPlaying = false;
         let isPaused = false;
         let currentTimeout = null;
-        let tempo = 80;
+        let tempo = 60; // Will be set to exercise default
         let currentNoteIndex = 0;
         let currentExercise = 'scale';
 
@@ -364,6 +364,7 @@
                 name: 'Chromatic Scale',
                 pattern: [0, 1, 2, 3, 4], // 5-note chromatic pattern
                 duration: 0.4,
+                tempo: 60,
                 syllables: ['ma', 'me', 'mi', 'mo', 'mu'],
                 technique: 'Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.',
                 primer: 'Chromatic scale: 1, ♯1, 2, ♯2, 3. Five-note chromatic pattern starting on each semitone.'
@@ -372,6 +373,7 @@
                 name: 'Baroque Trill - Italian Style',
                 pattern: [0, 2, 0, 2], // Trill: root, whole step up, root, whole step up
                 duration: 0.25,
+                tempo: 60,
                 syllables: ['i', 'e', 'a'],
                 technique: 'Classic upper-neighbor trill. Emphasize clarity and evenness. Keep the throat free and let rapid motion come from the vocal cords.',
                 primer: 'Upper-neighbor trill: 1-2-1-2 (do-re-do-re). Repeat this pattern at each semitone.'
@@ -380,6 +382,7 @@
                 name: 'Bel Canto Portamento',
                 pattern: [0, 4, 7, 12, 7, 4, 0], // Major arpeggio up and down
                 duration: 0.5,
+                tempo: 60,
                 syllables: ['o', 'u', 'a'],
                 technique: 'Smooth gliding between notes with connected tone. Focus on seamless legato. Imagine a ribbon of sound connecting each note without breaks.',
                 primer: 'Arpeggios with smooth connection: 1-3-5-8-5-3-1 (do-mi-sol-do-sol-mi-do). Major triad at each pitch.'
@@ -388,6 +391,7 @@
                 name: 'Coloratura Run',
                 pattern: [0, 2, 4, 5, 7, 5, 4, 2, 0], // Major scale fragment up and down
                 duration: 0.18,
+                tempo: 60,
                 syllables: ['a', 'i'],
                 technique: 'Rapid scale passages requiring agility and precision. Keep throat open and relaxed. Each note clear but connected like pearls on a string.',
                 primer: 'Fast runs: 1-2-3-4-5-4-3-2-1 (do-re-mi-fa-sol-fa-mi-re-do). Diatonic pattern at each step.'
@@ -396,6 +400,7 @@
                 name: 'Messa di Voce with Turn',
                 pattern: [0, 2, 0, -1, 0], // Turn: root, step up, root, step down, root
                 duration: 0.45,
+                tempo: 60,
                 syllables: ['a', 'e', 'o'],
                 technique: 'Crescendo-decrescendo on sustained notes with ornamental turn. Master dynamic control while maintaining steady breath support.',
                 primer: 'Turn around main note: 1-2-1-7-1 (do-re-do-ti-do). Add dynamic swell on each pattern.'
@@ -404,6 +409,7 @@
                 name: 'Appoggiatura Sequence',
                 pattern: [2, 0, 4, 2], // Leaning notes resolving down
                 duration: 0.4,
+                tempo: 60,
                 syllables: ['e', 'o'],
                 technique: 'Leaning notes resolving downward. Stress the appoggiatura with a slight accent, then release smoothly to the resolution.',
                 primer: 'Leaning note resolution: 2-1, 4-3 (re-do, fa-mi). Dissonance to resolution.'
@@ -412,6 +418,7 @@
                 name: 'Jazz Scoop and Fall',
                 pattern: [0, 4, 7, 4, 0], // Arpeggio with scoop
                 duration: 0.45,
+                tempo: 60,
                 syllables: ['a', 'oh', 'yeah'],
                 technique: 'Slide into and out of notes with style. Use vibrato at the peak. Channel the freedom and expressiveness of jazz phrasing.',
                 primer: 'Scoop to chord tones: 1-3-5-3-1 (do-mi-sol-mi-do) with glides.'
@@ -420,6 +427,7 @@
                 name: 'French Ornamental Grace Notes',
                 pattern: [-1, 0, 1, 2], // Grace note approach
                 duration: 0.3,
+                tempo: 60,
                 syllables: ['i', 'u'],
                 technique: 'Delicate grace notes before main tones. Light and articulate, like Couperin. Quick and elegant with refined articulation.',
                 primer: 'Grace note before main note: 7-1-2-3 (ti-do-re-mi). Quick ornamental approach.'
@@ -428,6 +436,7 @@
                 name: 'German Lieder Mordent',
                 pattern: [0, -1, 0], // Lower neighbor mordent
                 duration: 0.3,
+                tempo: 60,
                 syllables: ['ä', 'ö', 'a'],
                 technique: 'Quick alternation with lower neighbor. Expressive and speech-like. Channel the emotional depth of German Romantic song.',
                 primer: 'Lower-neighbor mordent: 1-7-1 (do-ti-do). Main note with quick dip below.'
@@ -436,6 +445,7 @@
                 name: 'Spanish Melisma',
                 pattern: [0, 2, 4, 7, 9, 7, 4, 0], // Flowing scale fragment
                 duration: 0.25,
+                tempo: 60,
                 syllables: ['a', 'ay', 'e'],
                 technique: 'Flowing melismatic passages with passion. Channel flamenco ornamentation. Let the notes cascade with energy and expression.',
                 primer: 'Flowing scale fragments: 1-2-3-5-6-5-3-1 (do-re-mi-sol-la-sol-mi-do). Cascading patterns.'
@@ -444,6 +454,7 @@
                 name: 'Staccato Pearls (Perlen)',
                 pattern: [0, 4, 7, 12], // Staccato arpeggio
                 duration: 0.18,
+                tempo: 60,
                 syllables: ['a', 'i'],
                 technique: 'Brilliant staccato notes like pearls on a string. Light, precise, and dazzling. Think Queen of the Night - each note sparkles individually.',
                 primer: 'Staccato arpeggios: 1-3-5-8 (do-mi-sol-do). Brilliant articulation ascending.'
@@ -452,6 +463,7 @@
                 name: 'Mariah Carey Melismatic Run',
                 pattern: [0, 1, 2, 4, 5, 7, 9, 7, 5, 4, 2, 1, 0], // Chromatic start to full octave
                 duration: 0.12,
+                tempo: 60,
                 syllables: ['a', 'e', 'i', 'oh'],
                 technique: 'Ultra-fast melismatic passages mixing chromatic and diatonic notes. Focus on throat relaxation and whistle-register readiness. Let the notes flow like water with effortless agility.',
                 primer: 'Melismatic cascade: 1-♯1-2-3-4-5-6-5-4-3-2-♯1-1. Fast chromatic-to-diatonic runs with decorative flourishes.'
@@ -460,6 +472,7 @@
                 name: 'Whitney Houston Gospel Run',
                 pattern: [0, 2, 3, 5, 7, 10, 7, 5, 3, 2, 0], // Pentatonic-influenced gospel run
                 duration: 0.15,
+                tempo: 60,
                 syllables: ['oh', 'yeah', 'a', 'e'],
                 technique: 'Soulful gospel runs with emotional depth. Add slight scoops and falls for authenticity. Let the spirit move through each note with power and passion.',
                 primer: 'Gospel pentatonic: 1-2-♭3-4-5-♭7-5-4-♭3-2-1. Pentatonic-based runs with soul and power.'
@@ -468,6 +481,7 @@
                 name: 'Ariana Grande Contemporary Run',
                 pattern: [0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2, 0], // Full octave scalar with chromatic touches
                 duration: 0.11,
+                tempo: 60,
                 syllables: ['a', 'e', 'i'],
                 technique: 'Modern pop runs with precision and speed. Light, airy tone with crisp articulation. Emphasis on agility while maintaining breathiness in the upper register.',
                 primer: 'Contemporary cascade: 1-2-3-4-5-6-7-8-7-6-5-4-3-2-1. Full octave runs with modern pop styling.'
@@ -645,6 +659,12 @@
             currentExercise = e.target.value;
             stopExercise();
             const exercise = exercises[currentExercise];
+
+            // Update tempo to exercise's default
+            tempo = exercise.tempo;
+            document.getElementById('tempo-slider').value = tempo;
+            document.getElementById('tempo-value').textContent = tempo + ' BPM';
+
             updateInfo(`Selected: ${exercise.name}`);
             updateGuidance();
             updatePrimer();
@@ -656,6 +676,9 @@
         });
 
         // Initialize
+        tempo = exercises[currentExercise].tempo;
+        document.getElementById('tempo-slider').value = tempo;
+        document.getElementById('tempo-value').textContent = tempo + ' BPM';
         updateButtons();
         updateGuidance();
         updatePrimer();
