@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soprano Ornamentation Exercises</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
         * {
             margin: 0;
@@ -290,8 +291,8 @@
     </div>
 
     <script>
-        // Audio Context Setup
-        let audioContext;
+        // Tone.js Setup
+        let synth;
         let currentExerciseIndex = 0;
         let isPlaying = false;
         let isPaused = false;
@@ -299,6 +300,23 @@
         let animationFrame;
         let currentTimeout;
         let tempo = 60; // BPM
+
+        // Initialize synth
+        function initializeSynth() {
+            if (!synth) {
+                synth = new Tone.Synth({
+                    oscillator: {
+                        type: 'sine'
+                    },
+                    envelope: {
+                        attack: 0.05,
+                        decay: 0.1,
+                        sustain: 0.3,
+                        release: 0.1
+                    }
+                }).toDestination();
+            }
+        }
 
         // Soprano range: A3 (220Hz) to D6 (1174.66Hz)
         // Starting from C4 (261.63Hz) to D6 (1174.66Hz), then down to A3 (220Hz)
@@ -534,90 +552,45 @@
             return scale;
         }
 
-        // Play a note with Web Audio API
+        // Play a note with Tone.js
         function playNote(frequency, duration, options = {}) {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
+            initializeSynth();
 
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            oscillator.type = 'sine';
-            oscillator.frequency.value = frequency;
-
-            const now = audioContext.currentTime;
             const noteDuration = duration * (60 / tempo); // Adjust for tempo
 
-            // Envelope for natural sound
+            // Adjust synth envelope based on options
             if (options.staccato) {
-                gainNode.gain.setValueAtTime(0, now);
-                gainNode.gain.linearRampToValueAtTime(0.3, now + 0.01);
-                gainNode.gain.linearRampToValueAtTime(0, now + noteDuration * 0.5);
-            } else if (options.dynamic === 'crescendo') {
-                gainNode.gain.setValueAtTime(0.05, now);
-                gainNode.gain.linearRampToValueAtTime(0.3, now + noteDuration);
-            } else if (options.dynamic === 'diminuendo') {
-                gainNode.gain.setValueAtTime(0.3, now);
-                gainNode.gain.linearRampToValueAtTime(0.05, now + noteDuration);
+                synth.envelope.attack = 0.01;
+                synth.envelope.release = noteDuration * 0.3;
+            } else if (options.dynamic === 'crescendo' || options.dynamic === 'diminuendo') {
+                synth.envelope.attack = noteDuration * 0.3;
+                synth.envelope.release = noteDuration * 0.3;
             } else {
-                gainNode.gain.setValueAtTime(0, now);
-                gainNode.gain.linearRampToValueAtTime(0.25, now + 0.05);
-                gainNode.gain.linearRampToValueAtTime(0.2, now + noteDuration - 0.05);
-                gainNode.gain.linearRampToValueAtTime(0, now + noteDuration);
+                synth.envelope.attack = 0.05;
+                synth.envelope.release = 0.1;
             }
 
-            // Vibrato
-            if (options.vibrato) {
-                const vibrato = audioContext.createOscillator();
-                const vibratoGain = audioContext.createGain();
-
-                vibrato.frequency.value = 5;
-                vibratoGain.gain.value = 10;
-
-                vibrato.connect(vibratoGain);
-                vibratoGain.connect(oscillator.frequency);
-
-                vibrato.start(now);
-                vibrato.stop(now + noteDuration);
-            }
-
-            oscillator.start(now);
-            oscillator.stop(now + noteDuration);
+            // Play the note
+            synth.triggerAttackRelease(frequency, noteDuration);
 
             return noteDuration * 1000; // Return duration in milliseconds
         }
 
-        // Play glide between notes
+        // Play glide between notes using Tone.js
         function playGlide(startFreq, endFreq, duration) {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
+            initializeSynth();
 
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            oscillator.type = 'sine';
-
-            const now = audioContext.currentTime;
             const glideDuration = duration * (60 / tempo);
+            const now = Tone.now();
 
-            oscillator.frequency.setValueAtTime(startFreq, now);
-            oscillator.frequency.exponentialRampToValueAtTime(endFreq, now + glideDuration);
+            // Trigger note
+            synth.triggerAttack(startFreq, now);
 
-            gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(0.2, now + 0.05);
-            gainNode.gain.linearRampToValueAtTime(0.2, now + glideDuration - 0.05);
-            gainNode.gain.linearRampToValueAtTime(0, now + glideDuration);
+            // Glide to end frequency
+            synth.frequency.rampTo(endFreq, glideDuration, now);
 
-            oscillator.start(now);
-            oscillator.stop(now + glideDuration);
+            // Release after duration
+            synth.triggerRelease(now + glideDuration);
 
             return glideDuration * 1000;
         }
@@ -630,14 +603,11 @@
         let breathCounter = 0;
 
         async function startExercise() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
+            // Start Tone.js audio context (required by browser autoplay policies)
+            await Tone.start();
+            console.log('Tone.js started');
 
-            // Resume audio context (required by browser autoplay policies)
-            if (audioContext.state === 'suspended') {
-                await audioContext.resume();
-            }
+            initializeSynth();
 
             if (isPaused) {
                 isPaused = false;
