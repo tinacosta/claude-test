@@ -81,13 +81,9 @@
         }
 
         .status {
-            font-size: 16px;
-            color: #ffeb3b;
-            margin-top: 15px;
-            font-weight: 600;
-            background: rgba(255, 235, 59, 0.1);
-            padding: 8px;
-            border-radius: 4px;
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 10px;
         }
 
         .controls {
@@ -164,26 +160,13 @@
         <div class="display-area">
             <div class="current-note" id="current-note">—</div>
             <div class="info" id="info-text">Select exercise and tap Start</div>
-            <div class="status" id="status-text">⚠️ STATUS: Page loaded - Ready to start</div>
+            <div class="status" id="status-text">Ready</div>
         </div>
 
         <div class="controls">
             <button class="btn-start" id="btn-start">Start Exercise</button>
             <button class="btn-pause" id="btn-pause" disabled>Pause</button>
             <button class="btn-stop" id="btn-stop" disabled>Stop</button>
-        </div>
-
-        <div style="text-align: center; margin: 15px 0; padding: 15px; background: #e3f2fd; border-radius: 8px; border: 2px solid #2196F3;">
-            <div style="font-size: 14px; color: #1976D2; font-weight: 600; margin-bottom: 10px;">🔧 AUDIO TEST</div>
-            <button id="test-beep" style="padding: 12px 20px; font-size: 15px; font-weight: 600; border: none; border-radius: 6px; background: #2196F3; color: white; cursor: pointer;">
-                TAP HERE for Test Beep
-            </button>
-            <div style="font-size: 11px; color: #666; margin-top: 8px;">Should hear a 1-second beep at 440Hz (A4)</div>
-        </div>
-
-        <div style="text-align: center; margin-top: 15px; padding: 10px; background: #ffe0b2; border-radius: 8px;">
-            <div style="font-size: 12px; color: #333; margin-bottom: 5px;">🔊 Diagnostic Info:</div>
-            <div id="diagnostic" style="font-size: 11px; color: #666; font-family: monospace;"></div>
         </div>
     </div>
 
@@ -240,56 +223,42 @@
         async function initAudio() {
             if (!audioContext) {
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                updateStatus('Audio context created: ' + audioContext.state);
             }
             // Resume if suspended (iOS requirement)
             if (audioContext.state === 'suspended') {
-                updateStatus('Resuming audio context...');
                 await audioContext.resume();
-                updateStatus('Audio context state: ' + audioContext.state);
             }
             return audioContext.state === 'running';
         }
 
         // Play a single note
         function playTone(frequency, duration) {
-            if (!audioContext) {
-                updateStatus('ERROR: No audio context');
+            if (!audioContext || audioContext.state !== 'running') {
                 return duration * 1000;
             }
 
-            if (audioContext.state !== 'running') {
-                updateStatus('ERROR: Audio context not running: ' + audioContext.state);
-                return duration * 1000;
-            }
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
 
-            try {
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
 
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
 
-                oscillator.frequency.value = frequency;
-                oscillator.type = 'sine';
+            const now = audioContext.currentTime;
+            const noteDuration = duration * (60 / tempo);
 
-                const now = audioContext.currentTime;
-                const noteDuration = duration * (60 / tempo);
+            // Simple envelope
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.5, now + 0.02);
+            gainNode.gain.linearRampToValueAtTime(0.4, now + noteDuration - 0.05);
+            gainNode.gain.linearRampToValueAtTime(0, now + noteDuration);
 
-                // Simple envelope with higher volume
-                gainNode.gain.setValueAtTime(0, now);
-                gainNode.gain.linearRampToValueAtTime(0.5, now + 0.02);
-                gainNode.gain.linearRampToValueAtTime(0.4, now + noteDuration - 0.05);
-                gainNode.gain.linearRampToValueAtTime(0, now + noteDuration);
+            oscillator.start(now);
+            oscillator.stop(now + noteDuration);
 
-                oscillator.start(now);
-                oscillator.stop(now + noteDuration);
-
-                return noteDuration * 1000;
-            } catch (error) {
-                updateStatus('ERROR playing: ' + error.message);
-                return duration * 1000;
-            }
+            return noteDuration * 1000;
         }
 
         // Play next note in sequence
@@ -324,15 +293,7 @@
 
         // Start exercise
         async function startExercise() {
-            updateStatus('Initializing audio...');
-
-            const audioReady = await initAudio();
-
-            if (!audioReady) {
-                updateStatus('ERROR: Audio failed to start. State: ' + (audioContext ? audioContext.state : 'no context'));
-                alert('Audio failed to initialize.\n\nMake sure:\n1. Volume is turned up\n2. Silent mode is OFF\n3. Try refreshing the page');
-                return;
-            }
+            await initAudio();
 
             if (isPaused) {
                 isPaused = false;
@@ -347,12 +308,10 @@
             currentNoteIndex = 0;
 
             const exercise = exercises[currentExercise];
-            updateInfo(`Starting: ${exercise.name}`);
-            updateStatus('Audio ready! Playing...');
+            updateInfo(`${exercise.name}`);
+            updateStatus('Playing...');
 
             updateButtons();
-
-            // Play first note immediately
             playNextNote();
         }
 
@@ -387,16 +346,7 @@
         }
 
         function updateStatus(text) {
-            const statusEl = document.getElementById('status-text');
-            statusEl.textContent = '⚠️ STATUS: ' + text;
-            updateDiagnostic(text);
-        }
-
-        function updateDiagnostic(message) {
-            const diagEl = document.getElementById('diagnostic');
-            const timestamp = new Date().toLocaleTimeString();
-            const existing = diagEl.innerHTML;
-            diagEl.innerHTML = `[${timestamp}] ${message}<br>${existing}`.substring(0, 500);
+            document.getElementById('status-text').textContent = text;
         }
 
         function updateButtons() {
@@ -405,67 +355,10 @@
             document.getElementById('btn-stop').disabled = !isPlaying && !isPaused;
         }
 
-        // Test beep function - simplest possible audio test
-        async function playTestBeep() {
-            updateDiagnostic('TEST BEEP: Button clicked');
-
-            try {
-                // Create audio context if needed
-                if (!audioContext) {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    updateDiagnostic('TEST BEEP: Created AudioContext, state=' + audioContext.state);
-                }
-
-                // Resume if needed
-                if (audioContext.state === 'suspended') {
-                    updateDiagnostic('TEST BEEP: Resuming suspended context...');
-                    await audioContext.resume();
-                    updateDiagnostic('TEST BEEP: Resumed, state=' + audioContext.state);
-                }
-
-                updateDiagnostic('TEST BEEP: Creating oscillator...');
-
-                // Create oscillator and gain
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-
-                // Set frequency to A440
-                osc.frequency.value = 440;
-                osc.type = 'sine';
-
-                // Set volume
-                const now = audioContext.currentTime;
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(0.8, now + 0.01);
-                gain.gain.linearRampToValueAtTime(0.8, now + 0.9);
-                gain.gain.linearRampToValueAtTime(0, now + 1.0);
-
-                updateDiagnostic('TEST BEEP: Starting oscillator at ' + now);
-                osc.start(now);
-                osc.stop(now + 1.0);
-
-                updateDiagnostic('TEST BEEP: Oscillator scheduled. LISTEN NOW!');
-                updateStatus('TEST BEEP PLAYING - DO YOU HEAR IT?');
-
-                setTimeout(() => {
-                    updateDiagnostic('TEST BEEP: Should be finished now');
-                }, 1100);
-
-            } catch (error) {
-                updateDiagnostic('TEST BEEP ERROR: ' + error.message);
-                updateStatus('TEST BEEP FAILED: ' + error.message);
-                alert('Test beep failed: ' + error.message);
-            }
-        }
-
         // Event listeners
         document.getElementById('btn-start').addEventListener('click', startExercise);
         document.getElementById('btn-pause').addEventListener('click', pauseExercise);
         document.getElementById('btn-stop').addEventListener('click', stopExercise);
-        document.getElementById('test-beep').addEventListener('click', playTestBeep);
 
         document.getElementById('exercise-select').addEventListener('change', (e) => {
             currentExercise = e.target.value;
@@ -481,9 +374,6 @@
 
         // Initialize
         updateButtons();
-        updateDiagnostic('JavaScript loaded successfully');
-        updateDiagnostic('WebAudio supported: ' + !!(window.AudioContext || window.webkitAudioContext));
-        updateDiagnostic('Device: ' + navigator.userAgent.substring(0, 50));
     </script>
 </body>
 </html>
