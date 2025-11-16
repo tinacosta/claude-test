@@ -81,9 +81,13 @@
         }
 
         .status {
-            font-size: 14px;
-            color: #aaa;
-            margin-top: 10px;
+            font-size: 16px;
+            color: #ffeb3b;
+            margin-top: 15px;
+            font-weight: 600;
+            background: rgba(255, 235, 59, 0.1);
+            padding: 8px;
+            border-radius: 4px;
         }
 
         .controls {
@@ -160,13 +164,18 @@
         <div class="display-area">
             <div class="current-note" id="current-note">—</div>
             <div class="info" id="info-text">Select exercise and tap Start</div>
-            <div class="status" id="status-text">Ready</div>
+            <div class="status" id="status-text">⚠️ STATUS: Page loaded - Ready to start</div>
         </div>
 
         <div class="controls">
             <button class="btn-start" id="btn-start">Start Exercise</button>
             <button class="btn-pause" id="btn-pause" disabled>Pause</button>
             <button class="btn-stop" id="btn-stop" disabled>Stop</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 15px; padding: 10px; background: #ffe0b2; border-radius: 8px;">
+            <div style="font-size: 12px; color: #333; margin-bottom: 5px;">🔊 Diagnostic Info:</div>
+            <div id="diagnostic" style="font-size: 11px; color: #666; font-family: monospace;"></div>
         </div>
     </div>
 
@@ -370,7 +379,16 @@
         }
 
         function updateStatus(text) {
-            document.getElementById('status-text').textContent = text;
+            const statusEl = document.getElementById('status-text');
+            statusEl.textContent = '⚠️ STATUS: ' + text;
+            updateDiagnostic(text);
+        }
+
+        function updateDiagnostic(message) {
+            const diagEl = document.getElementById('diagnostic');
+            const timestamp = new Date().toLocaleTimeString();
+            const existing = diagEl.innerHTML;
+            diagEl.innerHTML = `[${timestamp}] ${message}<br>${existing}`.substring(0, 500);
         }
 
         function updateButtons() {
@@ -398,6 +416,9 @@
 
         // Initialize
         updateButtons();
+        updateDiagnostic('JavaScript loaded successfully');
+        updateDiagnostic('WebAudio supported: ' + !!(window.AudioContext || window.webkitAudioContext));
+        updateDiagnostic('Device: ' + navigator.userAgent.substring(0, 50));
     </script>
 </body>
 </html>
