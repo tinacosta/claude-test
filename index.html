@@ -122,6 +122,36 @@
             background: linear-gradient(135deg, #f44336, #d32f2f);
         }
 
+        .guidance-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .guidance-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .syllables {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .technique {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+
         .tempo-control {
             margin-bottom: 20px;
             text-align: center;
@@ -150,6 +180,13 @@
                 <option value="run">Coloratura Run</option>
                 <option value="portamento">Bel Canto Portamento</option>
             </select>
+        </div>
+
+        <div class="guidance-box">
+            <div class="guidance-label">Syllables to Sing</div>
+            <div class="syllables" id="syllables-text">ma, me, mi, mo, mu</div>
+            <div class="guidance-label">Technique</div>
+            <div class="technique" id="technique-text">Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.</div>
         </div>
 
         <div class="tempo-control">
@@ -194,28 +231,36 @@
                 name: 'Simple Scale',
                 notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6',
                        'C6', 'B5', 'A5', 'G5', 'F5', 'E5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4', 'B3', 'A3'],
-                duration: 0.5
+                duration: 0.5,
+                syllables: ['ma', 'me', 'mi', 'mo', 'mu'],
+                technique: 'Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.'
             },
             trill: {
                 name: 'Baroque Trill',
                 notes: ['C4', 'D4', 'C4', 'D4', 'E4', 'F4', 'E4', 'F4', 'G4', 'A4', 'G4', 'A4',
                        'B4', 'C5', 'B4', 'C5', 'D5', 'E5', 'D5', 'E5', 'F5', 'G5', 'F5', 'G5',
                        'A5', 'B5', 'A5', 'B5', 'C6', 'D6', 'C6', 'D6'],
-                duration: 0.3
+                duration: 0.3,
+                syllables: ['la-la-la', 'di-di-di', 'i-i-i'],
+                technique: 'Light and articulate. Keep the jaw relaxed and let the throat do the work. Even oscillation between notes. Start slowly and build speed as you gain control.'
             },
             run: {
                 name: 'Coloratura Run',
                 notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4',
                        'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4',
                        'E5', 'F5', 'G5', 'A5', 'B5', 'C6', 'D6'],
-                duration: 0.25
+                duration: 0.25,
+                syllables: ['ah', 'ee', 'ay'],
+                technique: 'Agility and precision are key. Keep breath flowing steadily. Each note should be clear but connected. Maintain forward placement and use light, floating tone in upper register.'
             },
             portamento: {
                 name: 'Bel Canto Portamento',
                 notes: ['C4', 'E4', 'G4', 'C5', 'G4', 'E4', 'C4',
                        'D4', 'F4', 'A4', 'D5', 'A4', 'F4', 'D4',
                        'E5', 'G5', 'B5', 'E5', 'D6', 'B5', 'G5'],
-                duration: 0.6
+                duration: 0.6,
+                syllables: ['oh', 'ah', 'oo'],
+                technique: 'Glide smoothly between notes. Imagine sliding on a ribbon of sound. Keep the tone connected and legato. Support continuously and maintain resonance in the mask.'
             }
         };
 
@@ -355,6 +400,12 @@
             document.getElementById('btn-stop').disabled = !isPlaying && !isPaused;
         }
 
+        function updateGuidance() {
+            const exercise = exercises[currentExercise];
+            document.getElementById('syllables-text').textContent = exercise.syllables.join(', ');
+            document.getElementById('technique-text').textContent = exercise.technique;
+        }
+
         // Event listeners
         document.getElementById('btn-start').addEventListener('click', startExercise);
         document.getElementById('btn-pause').addEventListener('click', pauseExercise);
@@ -365,6 +416,7 @@
             stopExercise();
             const exercise = exercises[currentExercise];
             updateInfo(`Selected: ${exercise.name}`);
+            updateGuidance();
         });
 
         document.getElementById('tempo-slider').addEventListener('input', (e) => {
@@ -374,6 +426,7 @@
 
         // Initialize
         updateButtons();
+        updateGuidance();
     </script>
 </body>
 </html>
