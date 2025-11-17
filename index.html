@@ -210,10 +210,10 @@
                 <option value="mordent">German Lieder Mordent</option>
                 <option value="melisma">Spanish Melisma</option>
                 <option value="staccato">Staccato Pearls (Perlen)</option>
+                <option value="seannos">Sean Nós Irish Ornaments</option>
                 <option value="mariah">🎤 Mariah Carey Melismatic Run</option>
                 <option value="whitney">🎤 Whitney Houston Gospel Run</option>
                 <option value="ariana">🎤 Ariana Grande Contemporary Run</option>
-                <option value="seannos">🎤 Sean Nós Irish Ornaments</option>
                 <option value="rosalia">🎤 Rosalía Flamenco-Pop Run</option>
             </select>
         </div>
@@ -257,6 +257,7 @@
         let tempo = 60; // Will be set to exercise default
         let currentNoteIndex = 0;
         let currentExercise = 'scale';
+        let wakeLock = null; // Keep screen awake during exercises
 
         // Note frequencies
         const notes = {
@@ -520,6 +521,30 @@
             return audioContext.state === 'running';
         }
 
+        // Request wake lock to keep screen awake
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {
+                // Wake lock request failed - not critical, just continue
+                console.log('Wake lock error:', err);
+            }
+        }
+
+        // Release wake lock
+        async function releaseWakeLock() {
+            if (wakeLock !== null) {
+                try {
+                    await wakeLock.release();
+                    wakeLock = null;
+                } catch (err) {
+                    console.log('Wake lock release error:', err);
+                }
+            }
+        }
+
         // Play a single note
         function playTone(frequency, duration) {
             if (!audioContext || audioContext.state !== 'running') {
@@ -594,6 +619,7 @@
         // Start exercise
         async function startExercise() {
             await initAudio();
+            await requestWakeLock(); // Keep screen awake
 
             if (isPaused) {
                 isPaused = false;
@@ -624,6 +650,7 @@
             isPaused = true;
             isPlaying = false;
             if (currentTimeout) clearTimeout(currentTimeout);
+            releaseWakeLock(); // Allow screen to sleep
             updateStatus('Paused');
             updateButtons();
         }
@@ -634,6 +661,7 @@
             isPaused = false;
             if (currentTimeout) clearTimeout(currentTimeout);
             currentNoteIndex = 0;
+            releaseWakeLock(); // Allow screen to sleep
             updateNote('—');
             updateStatus('Stopped');
             updateInfo('Select exercise and tap Start');
