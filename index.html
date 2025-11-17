@@ -195,7 +195,7 @@
 <body>
     <div class="container">
         <h1>🎵 Soprano Ornamentation Exercises</h1>
-        <p class="subtitle">D3 to D6 Range • 13 Advanced Exercises</p>
+        <p class="subtitle">D3 to D6 Range • 15 Advanced Exercises</p>
 
         <div class="exercise-selector">
             <select id="exercise-select">
@@ -213,6 +213,8 @@
                 <option value="mariah">🎤 Mariah Carey Melismatic Run</option>
                 <option value="whitney">🎤 Whitney Houston Gospel Run</option>
                 <option value="ariana">🎤 Ariana Grande Contemporary Run</option>
+                <option value="seannos">🎤 Sean Nós Irish Ornaments</option>
+                <option value="rosalia">🎤 Rosalía Flamenco-Pop Run</option>
             </select>
         </div>
 
@@ -485,6 +487,24 @@
                 syllables: ['a', 'e', 'i'],
                 technique: 'Modern pop runs with precision and speed. Light, airy tone with crisp articulation. Emphasis on agility while maintaining breathiness in the upper register.',
                 primer: 'Contemporary cascade: 1-2-3-4-5-6-7-8-7-6-5-4-3-2-1. Full octave runs with modern pop styling.'
+            },
+            seannos: {
+                name: 'Sean Nós Irish Ornaments',
+                pattern: [0, 1, 0, -1, 0, 2, 0], // Crann (triplet) and grace note ornaments
+                duration: 0.22,
+                tempo: 60,
+                syllables: ['a', 'o', 'i'],
+                technique: 'Irish traditional ornaments with slides and grace notes. Keep the ornamentation natural and speech-like. Let each ornament flow freely without strict rhythm - this is the heart of sean nós.',
+                primer: 'Irish crann ornament: 1-♯1-1-7-1-2-1 (do-di-do-ti-do-re-do). Free-flowing grace notes and slides.'
+            },
+            rosalia: {
+                name: 'Rosalía Flamenco-Pop Run',
+                pattern: [0, 1, 3, 5, 6, 8, 10, 8, 6, 5, 3, 1, 0], // Phrygian-influenced with chromatic touches
+                duration: 0.13,
+                tempo: 60,
+                syllables: ['a', 'e', 'ay', 'oh'],
+                technique: 'Contemporary flamenco fusion with dramatic flair. Mix traditional Spanish ornamentation with modern pop precision. Add vibrato and slight pitch bends for authentic Rosalía style.',
+                primer: 'Flamenco-pop cascade: 1-♭2-♭3-4-♭5-♭6-♭7-♭6-♭5-4-♭3-♭2-1. Phrygian mode with fire and passion.'
             }
         };
 
