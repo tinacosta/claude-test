@@ -195,7 +195,7 @@
 <body>
     <div class="container">
         <h1>🎵 Soprano Ornamentation Exercises</h1>
-        <p class="subtitle">D3 to D6 Range • 16 Advanced Exercises</p>
+        <p class="subtitle">D3 to D6 Range • 17 Advanced Exercises</p>
 
         <div class="exercise-selector">
             <select id="exercise-select">
@@ -206,6 +206,7 @@
                 <option value="messa">Messa di Voce with Turn</option>
                 <option value="appoggiatura">Appoggiatura Sequence</option>
                 <option value="doubleappoggiatura">Double Appoggiatura from Above</option>
+                <option value="seannoscut">Sean Nós Cut (Diatonic)</option>
                 <option value="jazz">Jazz Scoop and Fall</option>
                 <option value="french">French Ornamental Grace Notes</option>
                 <option value="mordent">German Lieder Mordent</option>
@@ -432,6 +433,15 @@
                 syllables: ['a', 'e', 'o'],
                 technique: 'Two ornamental notes from above resolving to the main note. Classical Baroque ornamentation. Let each note cascade gracefully downward with elegant articulation.',
                 primer: 'Double ornament descent: 2-♯1-1, 3-♯2-2 (re-di-do, mi-ri-re). Two-note descent to resolution.'
+            },
+            seannoscut: {
+                name: 'Sean Nós Cut (Diatonic)',
+                pattern: [4, 2, 0], // Long cut: diatonic triplet down
+                duration: 0.2,
+                tempo: 60,
+                syllables: ['a', 'o'],
+                technique: 'Irish traditional "long cut" ornament. Three notes descending diatonically in a quick, natural triplet. Keep it light and speech-like, not mechanical. This is pure sean nós style.',
+                primer: 'Long cut: 3-2-1 (mi-re-do). Diatonic triplet ornament descending to main note.'
             },
             jazz: {
                 name: 'Jazz Scoop and Fall',
