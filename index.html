@@ -195,11 +195,12 @@
 <body>
     <div class="container">
         <h1>🎵 Soprano Ornamentation Exercises</h1>
-        <p class="subtitle">D3 to D6 Range • 17 Advanced Exercises</p>
+        <p class="subtitle">D3 to D6 Range • 18 Advanced Exercises</p>
 
         <div class="exercise-selector">
             <select id="exercise-select">
                 <option value="scale">Chromatic Scale (C4-D6-D3)</option>
+                <option value="ninescale">Nine-Note Scale</option>
                 <option value="trill">Baroque Trill - Italian Style</option>
                 <option value="portamento">Bel Canto Portamento</option>
                 <option value="run">Coloratura Run</option>
@@ -379,6 +380,15 @@
                 syllables: ['ma', 'me', 'mi', 'mo', 'mu'],
                 technique: 'Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.',
                 primer: 'Chromatic scale: 1, ♯1, 2, ♯2, 3. Five-note chromatic pattern starting on each semitone.'
+            },
+            ninescale: {
+                name: 'Nine-Note Scale',
+                pattern: [0, 2, 4, 5, 7, 9, 11, 12, 14], // Major scale up a 9th
+                duration: 0.35,
+                tempo: 60,
+                syllables: ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti', 'do', 're'],
+                technique: 'Ascending nine-note major scale spanning an octave plus a second. Excellent for range extension and smooth register transitions. Maintain even tone throughout the entire passage.',
+                primer: 'Major 9th: 1-2-3-4-5-6-7-8-9 (do-re-mi-fa-sol-la-ti-do-re). Full octave plus one step.'
             },
             trill: {
                 name: 'Baroque Trill - Italian Style',
