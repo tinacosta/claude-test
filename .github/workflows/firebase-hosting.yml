@@ -1,0 +1,29 @@
+name: Deploy to Firebase Hosting on Commit
+
+on:
+  # Triggers the workflow on push events
+  push:
+    branches:
+      - main # Change 'main' to your primary branch name if different (e.g., 'master')
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checks out your repository under $GITHUB_WORKSPACE
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Use the official Firebase Hosting Deploy Action
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          # The ID of your Firebase project. Find this in the Firebase Console URL or Project Settings.
+          repoToken: ${{ secrets.GITHUB_TOKEN }} # Used to allow GitHub to manage the deploy status
+          firebaseServiceAccount: ${{ secrets.FIREBASE_DEPLOY_TOKEN }} # The token we saved in Step 2
+          projectId: YOUR_PROJECT_ID # <-- !! CHANGE THIS TO YOUR ACTUAL PROJECT ID !!
+          channelId: live # Deploy to the default live URL
+          # The path to your public directory (usually the folder containing index.html)
+          # Default is 'public' if you ran 'firebase init'
+          entryPoint: .
