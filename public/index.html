@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soprano Ornamentation Exercises</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        h1 {
+            color: #1a1a2e;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        .exercise-selector {
+            margin-bottom: 24px;
+        }
+
+        .exercise-selector select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            background: #ffffff;
+            color: #1a1a2e;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%236b7280' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .exercise-selector select:hover {
+            border-color: #667eea;
+            background-color: #fafbfc;
+        }
+
+        .exercise-selector select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .primer-box {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 1px solid rgba(251, 146, 60, 0.2);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            border-radius: 16px;
+        }
+
+        .guidance-box {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8efff 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            border-radius: 16px;
+        }
+
+        .guidance-label, .primer-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .guidance-label {
+            color: #667eea;
+        }
+
+        .primer-label {
+            color: #fb923c;
+        }
+
+        .primer-text {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.6;
+            font-family: 'SF Mono', 'Menlo', 'Courier New', monospace;
+        }
+
+        .syllables {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 12px;
+        }
+
+        .technique {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .tempo-control {
+            margin-bottom: 20px;
+        }
+
+        .tempo-control > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        .tempo-value {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .tempo-control input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: linear-gradient(to right, #667eea 0%, #667eea var(--value), #e5e7eb var(--value), #e5e7eb 100%);
+            outline: none;
+            -webkit-appearance: none;
+            transition: all 0.2s ease;
+        }
+
+        .tempo-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .tempo-control input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .tempo-control input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .tempo-control input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .display-area {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 40px 24px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            min-height: 200px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .current-note {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #fbbf24;
+            letter-spacing: -2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .info {
+            font-size: 16px;
+            color: #94a3b8;
+            margin: 12px 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .status {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            color: white;
+            min-width: 110px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .btn-start:hover:not(:disabled) {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .btn-pause {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .btn-pause:hover:not(:disabled) {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+        }
+
+        .btn-stop {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .btn-stop:hover:not(:disabled) {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 28px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .current-note {
+                font-size: 56px;
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Soprano Ornamentation Exercises</h1>
+        <p class="subtitle">D3 to D6 Range • 18 Advanced Exercises</p>
+
+        <div class="exercise-selector">
+            <select id="exercise-select">
+                <option value="scale">Chromatic Scale (C4-D6-D3)</option>
+                <option value="ninescale">Nine-Note Scale</option>
+                <option value="trill">Baroque Trill - Italian Style</option>
+                <option value="portamento">Bel Canto Portamento</option>
+                <option value="run">Coloratura Run</option>
+                <option value="messa">Messa di Voce with Turn</option>
+                <option value="appoggiatura">Appoggiatura Sequence</option>
+                <option value="doubleappoggiatura">Double Appoggiatura from Above</option>
+                <option value="seannoscut">Sean Nós Cut (Diatonic)</option>
+                <option value="jazz">Jazz Scoop and Fall</option>
+                <option value="french">French Ornamental Grace Notes</option>
+                <option value="mordent">German Lieder Mordent</option>
+                <option value="melisma">Spanish Melisma</option>
+                <option value="staccato">Staccato Pearls (Perlen)</option>
+                <option value="seannos">Sean Nós Irish Ornaments</option>
+                <option value="mariah">🎤 Mariah Carey Melismatic Run</option>
+                <option value="whitney">🎤 Whitney Houston Gospel Run</option>
+                <option value="ariana">🎤 Ariana Grande Contemporary Run</option>
+                <option value="rosalia">🎤 Rosalía Flamenco-Pop Run</option>
+            </select>
+        </div>
+
+        <div class="primer-box">
+            <div class="primer-label">Exercise Pattern</div>
+            <div class="primer-text" id="primer-text">Chromatic scale: 1, ♯1/♭2, 2, ♯2/♭3, 3, 4, ♯4/♭5, 5, ♯5/♭6, 6, ♯6/♭7, 7, 8... Ascending by half steps with breath between each step, then descending.</div>
+        </div>
+
+        <div class="guidance-box">
+            <div class="guidance-label">Syllables to Sing</div>
+            <div class="syllables" id="syllables-text">ma, me, mi, mo, mu</div>
+            <div class="guidance-label">Technique</div>
+            <div class="technique" id="technique-text">Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.</div>
+        </div>
+
+        <div class="tempo-control">
+            <div>Tempo: <span class="tempo-value" id="tempo-value">60 BPM</span></div>
+            <input type="range" id="tempo-slider" min="20" max="140" value="60" step="5">
+        </div>
+
+        <div class="tempo-control">
+            <div>Volume: <span class="tempo-value" id="volume-value">50%</span></div>
+            <input type="range" id="volume-slider" min="10" max="100" value="50" step="5">
+        </div>
+
+        <div class="display-area">
+            <div class="current-note" id="current-note">—</div>
+            <div class="info" id="info-text">Select exercise and tap Start</div>
+            <div class="status" id="status-text">Ready</div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-start" id="btn-start">Start Exercise</button>
+            <button class="btn-pause" id="btn-pause" disabled>Pause</button>
+            <button class="btn-stop" id="btn-stop" disabled>Stop</button>
+        </div>
+    </div>
+
+    <script>
+        // Simple Web Audio API implementation for mobile compatibility
+        let audioContext = null;
+        let isPlaying = false;
+        let isPaused = false;
+        let currentTimeout = null;
+        let tempo = 60; // Will be set to exercise default
+        let volume = 50; // Volume percentage (10-100)
+        let currentNoteIndex = 0;
+        let currentExercise = 'scale';
+        let wakeLock = null; // Keep screen awake during exercises
+
+        // Note frequencies
+        const notes = {
+            'D3': 146.83, 'D#3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00, 'G#3': 207.65,
+            'A3': 220.00, 'A#3': 233.08, 'B3': 246.94,
+            'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13, 'E4': 329.63,
+            'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'G#4': 415.30, 'A4': 440.00,
+            'A#4': 466.16, 'B4': 493.88,
+            'C5': 523.25, 'C#5': 554.37, 'D5': 587.33, 'D#5': 622.25, 'E5': 659.25,
+            'F5': 698.46, 'F#5': 739.99, 'G5': 783.99, 'G#5': 830.61, 'A5': 880.00,
+            'A#5': 932.33, 'B5': 987.77,
+            'C6': 1046.50, 'C#6': 1108.73, 'D6': 1174.66
+        };
+
+        // Helper to get all notes in chromatic order
+        const chromaticNotes = ['C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4',
+                                'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5', 'G#5', 'A5', 'A#5', 'B5',
+                                'C6', 'C#6', 'D6'];
+        const descendingNotes = ['C#6', 'C6', 'B5', 'A#5', 'A5', 'G#5', 'G5', 'F#5', 'F5', 'E5', 'D#5', 'D5', 'C#5', 'C5',
+                                 'B4', 'A#4', 'A4', 'G#4', 'G4', 'F#4', 'F4', 'E4', 'D#4', 'D4', 'C#4', 'C4',
+                                 'B3', 'A#3', 'A3', 'G#3', 'G3', 'F#3', 'F3', 'E3', 'D#3', 'D3'];
+
+        // Helper to transpose a pattern by semitones
+        function transposeNote(baseNote, semitones) {
+            const allNoteNames = Object.keys(notes);
+            const baseIndex = allNoteNames.indexOf(baseNote);
+            if (baseIndex === -1) return baseNote;
+            const newIndex = baseIndex + semitones;
+            if (newIndex >= 0 && newIndex < allNoteNames.length) {
+                return allNoteNames[newIndex];
+            }
+            return baseNote;
+        }
+
+        // Check if a pattern starting at a note would exceed max range
+        function patternExceedsMax(startNote, pattern, maxNote) {
+            const allNoteNames = Object.keys(notes);
+            const startIndex = allNoteNames.indexOf(startNote);
+            const maxIndex = allNoteNames.indexOf(maxNote);
+
+            for (const interval of pattern) {
+                const targetIndex = startIndex + interval;
+                // Check if the target index would be out of bounds or exceed max
+                if (targetIndex < 0 || targetIndex >= allNoteNames.length || targetIndex > maxIndex) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Check if a pattern starting at a note would go below min range
+        function patternGoesBelowMin(startNote, pattern, minNote) {
+            const allNoteNames = Object.keys(notes);
+            const startIndex = allNoteNames.indexOf(startNote);
+            const minIndex = allNoteNames.indexOf(minNote);
+
+            for (const interval of pattern) {
+                const targetIndex = startIndex + interval;
+                // Check if the target index would be out of bounds or below min
+                if (targetIndex < 0 || targetIndex >= allNoteNames.length || targetIndex < minIndex) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Generate notes for an exercise based on pattern
+        function generateExerciseNotes(pattern) {
+            const allNotes = [];
+            const allNoteNames = Object.keys(notes);
+            let highestStartNoteIndex = -1;
+
+            // Ascending - stop when pattern would exceed D6
+            for (let i = 0; i < chromaticNotes.length; i++) {
+                const startNote = chromaticNotes[i];
+                if (patternExceedsMax(startNote, pattern, 'D6')) {
+                    break; // Stop ascending when pattern would exceed D6
+                }
+                highestStartNoteIndex = allNoteNames.indexOf(startNote);
+                for (const interval of pattern) {
+                    allNotes.push(transposeNote(startNote, interval));
+                }
+                allNotes.push('BREATH'); // Breathing marker
+            }
+
+            // Descending - start from one semitone below where we stopped ascending
+            // Only stop when pattern would go below D3 (not when it reaches up to D6)
+            if (highestStartNoteIndex >= 0) {
+                for (let i = highestStartNoteIndex - 1; i >= 0; i--) {
+                    const startNote = allNoteNames[i];
+                    if (patternGoesBelowMin(startNote, pattern, 'D3')) {
+                        break; // Stop descending when pattern would go below D3
+                    }
+                    for (const interval of pattern) {
+                        allNotes.push(transposeNote(startNote, interval));
+                    }
+                    allNotes.push('BREATH'); // Breathing marker
+                }
+            }
+
+            return allNotes;
+        }
+
+        // Exercise patterns (defined as interval patterns from root)
+        const exercises = {
+            scale: {
+                name: 'Chromatic Scale',
+                pattern: [0, 1, 2, 3, 4], // 5-note chromatic pattern
+                duration: 0.4,
+                tempo: 60,
+                syllables: ['ma', 'me', 'mi', 'mo', 'mu'],
+                technique: 'Keep throat open and relaxed. Support from the diaphragm. Maintain consistent tone quality throughout the range. Focus on smooth transitions between registers.',
+                primer: 'Chromatic scale: 1, ♯1, 2, ♯2, 3. Five-note chromatic pattern starting on each semitone.'
+            },
+            ninescale: {
+                name: 'Nine-Note Scale',
+                pattern: [0, 2, 4, 5, 7, 9, 11, 12, 14, 12, 11, 9, 7, 5, 4, 2, 0], // Major scale up a 9th and back down
+                duration: 0.35,
+                tempo: 60,
+                syllables: ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti', 'do', 're'],
+                technique: 'Ascending nine-note major scale spanning an octave plus a second, then descending back. Excellent for range extension and smooth register transitions. Maintain even tone throughout the entire passage.',
+                primer: 'Major 9th up and down: 1-2-3-4-5-6-7-8-9-8-7-6-5-4-3-2-1 (do-re-mi-fa-sol-la-ti-do-re-do-ti-la-sol-fa-mi-re-do).'
+            },
+            trill: {
+                name: 'Baroque Trill - Italian Style',
+                pattern: [0, 2, 0, 2], // Trill: root, whole step up, root, whole step up
+                duration: 0.25,
+                tempo: 60,
+                syllables: ['i', 'e', 'a'],
+                technique: 'Classic upper-neighbor trill. Emphasize clarity and evenness. Keep the throat free and let rapid motion come from the vocal cords.',
+                primer: 'Upper-neighbor trill: 1-2-1-2 (do-re-do-re). Repeat this pattern at each semitone.'
+            },
+            portamento: {
+                name: 'Bel Canto Portamento',
+                pattern: [0, 4, 7, 12, 7, 4, 0], // Major arpeggio up and down
+                duration: 0.5,
+                tempo: 60,
+                syllables: ['o', 'u', 'a'],
+                technique: 'Smooth gliding between notes with connected tone. Focus on seamless legato. Imagine a ribbon of sound connecting each note without breaks.',
+                primer: 'Arpeggios with smooth connection: 1-3-5-8-5-3-1 (do-mi-sol-do-sol-mi-do). Major triad at each pitch.'
+            },
+            run: {
+                name: 'Coloratura Run',
+                pattern: [0, 2, 4, 5, 7, 5, 4, 2, 0], // Major scale fragment up and down
+                duration: 0.18,
+                tempo: 60,
+                syllables: ['a', 'i'],
+                technique: 'Rapid scale passages requiring agility and precision. Keep throat open and relaxed. Each note clear but connected like pearls on a string.',
+                primer: 'Fast runs: 1-2-3-4-5-4-3-2-1 (do-re-mi-fa-sol-fa-mi-re-do). Diatonic pattern at each step.'
+            },
+            messa: {
+                name: 'Messa di Voce with Turn',
+                pattern: [0, 2, 0, -1, 0], // Turn: root, step up, root, step down, root
+                duration: 0.45,
+                tempo: 60,
+                syllables: ['a', 'e', 'o'],
+                technique: 'Crescendo-decrescendo on sustained notes with ornamental turn. Master dynamic control while maintaining steady breath support.',
+                primer: 'Turn around main note: 1-2-1-7-1 (do-re-do-ti-do). Add dynamic swell on each pattern.'
+            },
+            appoggiatura: {
+                name: 'Appoggiatura Sequence',
+                pattern: [2, 0, 4, 2], // Leaning notes resolving down
+                duration: 0.4,
+                tempo: 60,
+                syllables: ['e', 'o'],
+                technique: 'Leaning notes resolving downward. Stress the appoggiatura with a slight accent, then release smoothly to the resolution.',
+                primer: 'Leaning note resolution: 2-1, 4-3 (re-do, fa-mi). Dissonance to resolution.'
+            },
+            doubleappoggiatura: {
+                name: 'Double Appoggiatura from Above',
+                pattern: [2, 1, 0, 4, 3, 2], // Two ornamental notes resolving down
+                duration: 0.35,
+                tempo: 60,
+                syllables: ['a', 'e', 'o'],
+                technique: 'Two ornamental notes from above resolving to the main note. Classical Baroque ornamentation. Let each note cascade gracefully downward with elegant articulation.',
+                primer: 'Double ornament descent: 2-♯1-1, 3-♯2-2 (re-di-do, mi-ri-re). Two-note descent to resolution.'
+            },
+            seannoscut: {
+                name: 'Sean Nós Cut (Diatonic)',
+                pattern: [4, 2, 0], // Long cut: diatonic triplet down
+                duration: 0.2,
+                tempo: 60,
+                syllables: ['a', 'o'],
+                technique: 'Irish traditional "long cut" ornament. Three notes descending diatonically in a quick, natural triplet. Keep it light and speech-like, not mechanical. This is pure sean nós style.',
+                primer: 'Long cut: 3-2-1 (mi-re-do). Diatonic triplet ornament descending to main note.'
+            },
+            jazz: {
+                name: 'Jazz Scoop and Fall',
+                pattern: [0, 4, 7, 4, 0], // Arpeggio with scoop
+                duration: 0.45,
+                tempo: 60,
+                syllables: ['a', 'oh', 'yeah'],
+                technique: 'Slide into and out of notes with style. Use vibrato at the peak. Channel the freedom and expressiveness of jazz phrasing.',
+                primer: 'Scoop to chord tones: 1-3-5-3-1 (do-mi-sol-mi-do) with glides.'
+            },
+            french: {
+                name: 'French Ornamental Grace Notes',
+                pattern: [-1, 0, 1, 2], // Grace note approach
+                duration: 0.3,
+                tempo: 60,
+                syllables: ['i', 'u'],
+                technique: 'Delicate grace notes before main tones. Light and articulate, like Couperin. Quick and elegant with refined articulation.',
+                primer: 'Grace note before main note: 7-1-2-3 (ti-do-re-mi). Quick ornamental approach.'
+            },
+            mordent: {
+                name: 'German Lieder Mordent',
+                pattern: [0, -1, 0], // Lower neighbor mordent
+                duration: 0.3,
+                tempo: 60,
+                syllables: ['ä', 'ö', 'a'],
+                technique: 'Quick alternation with lower neighbor. Expressive and speech-like. Channel the emotional depth of German Romantic song.',
+                primer: 'Lower-neighbor mordent: 1-7-1 (do-ti-do). Main note with quick dip below.'
+            },
+            melisma: {
+                name: 'Spanish Melisma',
+                pattern: [0, 2, 4, 7, 9, 7, 4, 0], // Flowing scale fragment
+                duration: 0.25,
+                tempo: 60,
+                syllables: ['a', 'ay', 'e'],
+                technique: 'Flowing melismatic passages with passion. Channel flamenco ornamentation. Let the notes cascade with energy and expression.',
+                primer: 'Flowing scale fragments: 1-2-3-5-6-5-3-1 (do-re-mi-sol-la-sol-mi-do). Cascading patterns.'
+            },
+            staccato: {
+                name: 'Staccato Pearls (Perlen)',
+                pattern: [0, 4, 7, 12], // Staccato arpeggio
+                duration: 0.18,
+                tempo: 60,
+                syllables: ['a', 'i'],
+                technique: 'Brilliant staccato notes like pearls on a string. Light, precise, and dazzling. Think Queen of the Night - each note sparkles individually.',
+                primer: 'Staccato arpeggios: 1-3-5-8 (do-mi-sol-do). Brilliant articulation ascending.'
+            },
+            mariah: {
+                name: 'Mariah Carey Melismatic Run',
+                pattern: [0, 1, 2, 4, 5, 7, 9, 7, 5, 4, 2, 1, 0], // Chromatic start to full octave
+                duration: 0.12,
+                tempo: 60,
+                syllables: ['a', 'e', 'i', 'oh'],
+                technique: 'Ultra-fast melismatic passages mixing chromatic and diatonic notes. Focus on throat relaxation and whistle-register readiness. Let the notes flow like water with effortless agility.',
+                primer: 'Melismatic cascade: 1-♯1-2-3-4-5-6-5-4-3-2-♯1-1. Fast chromatic-to-diatonic runs with decorative flourishes.'
+            },
+            whitney: {
+                name: 'Whitney Houston Gospel Run',
+                pattern: [0, 2, 3, 5, 7, 10, 7, 5, 3, 2, 0], // Pentatonic-influenced gospel run
+                duration: 0.15,
+                tempo: 60,
+                syllables: ['oh', 'yeah', 'a', 'e'],
+                technique: 'Soulful gospel runs with emotional depth. Add slight scoops and falls for authenticity. Let the spirit move through each note with power and passion.',
+                primer: 'Gospel pentatonic: 1-2-♭3-4-5-♭7-5-4-♭3-2-1. Pentatonic-based runs with soul and power.'
+            },
+            ariana: {
+                name: 'Ariana Grande Contemporary Run',
+                pattern: [0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2, 0], // Full octave scalar with chromatic touches
+                duration: 0.11,
+                tempo: 60,
+                syllables: ['a', 'e', 'i'],
+                technique: 'Modern pop runs with precision and speed. Light, airy tone with crisp articulation. Emphasis on agility while maintaining breathiness in the upper register.',
+                primer: 'Contemporary cascade: 1-2-3-4-5-6-7-8-7-6-5-4-3-2-1. Full octave runs with modern pop styling.'
+            },
+            seannos: {
+                name: 'Sean Nós Irish Ornaments',
+                pattern: [0, 1, 0, -1, 0, 2, 0], // Crann (triplet) and grace note ornaments
+                duration: 0.22,
+                tempo: 60,
+                syllables: ['a', 'o', 'i'],
+                technique: 'Irish traditional ornaments with slides and grace notes. Keep the ornamentation natural and speech-like. Let each ornament flow freely without strict rhythm - this is the heart of sean nós.',
+                primer: 'Irish crann ornament: 1-♯1-1-7-1-2-1 (do-di-do-ti-do-re-do). Free-flowing grace notes and slides.'
+            },
+            rosalia: {
+                name: 'Rosalía Flamenco-Pop Run',
+                pattern: [0, 1, 3, 5, 6, 8, 10, 8, 6, 5, 3, 1, 0], // Phrygian-influenced with chromatic touches
+                duration: 0.13,
+                tempo: 60,
+                syllables: ['a', 'e', 'ay', 'oh'],
+                technique: 'Contemporary flamenco fusion with dramatic flair. Mix traditional Spanish ornamentation with modern pop precision. Add vibrato and slight pitch bends for authentic Rosalía style.',
+                primer: 'Flamenco-pop cascade: 1-♭2-♭3-4-♭5-♭6-♭7-♭6-♭5-4-♭3-♭2-1. Phrygian mode with fire and passion.'
+            }
+        };
+
+        // Initialize audio context on user interaction
+        async function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            // Resume if suspended (iOS requirement)
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+            return audioContext.state === 'running';
+        }
+
+        // Request wake lock to keep screen awake
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {
+                // Wake lock request failed - not critical, just continue
+                console.log('Wake lock error:', err);
+            }
+        }
+
+        // Release wake lock
+        async function releaseWakeLock() {
+            if (wakeLock !== null) {
+                try {
+                    await wakeLock.release();
+                    wakeLock = null;
+                } catch (err) {
+                    console.log('Wake lock release error:', err);
+                }
+            }
+        }
+
+        // Play a single note
+        function playTone(frequency, duration) {
+            if (!audioContext || audioContext.state !== 'running') {
+                return duration * 1000;
+            }
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+
+            const now = audioContext.currentTime;
+            const noteDuration = duration * (60 / tempo);
+
+            // Simple envelope with volume control
+            const volumeScale = volume / 100;
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.5 * volumeScale, now + 0.02);
+            gainNode.gain.linearRampToValueAtTime(0.4 * volumeScale, now + noteDuration - 0.05);
+            gainNode.gain.linearRampToValueAtTime(0, now + noteDuration);
+
+            oscillator.start(now);
+            oscillator.stop(now + noteDuration);
+
+            return noteDuration * 1000;
+        }
+
+        // Play next note in sequence
+        function playNextNote() {
+            if (!isPlaying || isPaused) return;
+
+            const exercise = exercises[currentExercise];
+
+            if (currentNoteIndex >= exercise.notes.length) {
+                stopExercise();
+                updateStatus('Exercise complete!');
+                updateNote('✓');
+                updateInfo('Well done!');
+                return;
+            }
+
+            const noteName = exercise.notes[currentNoteIndex];
+
+            // Check for breathing marker
+            if (noteName === 'BREATH') {
+                updateStatus('Breathe...');
+                currentNoteIndex++;
+                currentTimeout = setTimeout(() => {
+                    playNextNote();
+                }, 800); // 800ms breathing pause
+                return;
+            }
+
+            const frequency = notes[noteName];
+
+            updateNote(noteName);
+            updateInfo(`Note ${currentNoteIndex + 1} of ${exercise.notes.length}`);
+            updateStatus('Playing...');
+
+            const duration = playTone(frequency, exercise.duration);
+
+            currentNoteIndex++;
+
+            currentTimeout = setTimeout(() => {
+                playNextNote();
+            }, duration);
+        }
+
+        // Start exercise
+        async function startExercise() {
+            await initAudio();
+            await requestWakeLock(); // Keep screen awake
+
+            if (isPaused) {
+                isPaused = false;
+                isPlaying = true;
+                updateButtons();
+                playNextNote();
+                return;
+            }
+
+            isPlaying = true;
+            isPaused = false;
+            currentNoteIndex = 0;
+
+            const exercise = exercises[currentExercise];
+
+            // Generate notes from pattern
+            exercise.notes = generateExerciseNotes(exercise.pattern);
+
+            updateInfo(`${exercise.name}`);
+            updateStatus('Playing...');
+
+            updateButtons();
+            playNextNote();
+        }
+
+        // Pause exercise
+        function pauseExercise() {
+            isPaused = true;
+            isPlaying = false;
+            if (currentTimeout) clearTimeout(currentTimeout);
+            releaseWakeLock(); // Allow screen to sleep
+            updateStatus('Paused');
+            updateButtons();
+        }
+
+        // Stop exercise
+        function stopExercise() {
+            isPlaying = false;
+            isPaused = false;
+            if (currentTimeout) clearTimeout(currentTimeout);
+            currentNoteIndex = 0;
+            releaseWakeLock(); // Allow screen to sleep
+            updateNote('—');
+            updateStatus('Stopped');
+            updateInfo('Select exercise and tap Start');
+            updateButtons();
+        }
+
+        // Update UI
+        function updateNote(note) {
+            document.getElementById('current-note').textContent = note;
+        }
+
+        function updateInfo(text) {
+            document.getElementById('info-text').textContent = text;
+        }
+
+        function updateStatus(text) {
+            document.getElementById('status-text').textContent = text;
+        }
+
+        function updateButtons() {
+            document.getElementById('btn-start').disabled = isPlaying;
+            document.getElementById('btn-pause').disabled = !isPlaying;
+            document.getElementById('btn-stop').disabled = !isPlaying && !isPaused;
+        }
+
+        function updateGuidance() {
+            const exercise = exercises[currentExercise];
+            document.getElementById('syllables-text').textContent = exercise.syllables.join(', ');
+            document.getElementById('technique-text').textContent = exercise.technique;
+        }
+
+        function updatePrimer() {
+            const exercise = exercises[currentExercise];
+            document.getElementById('primer-text').textContent = exercise.primer;
+        }
+
+        // Event listeners
+        document.getElementById('btn-start').addEventListener('click', startExercise);
+        document.getElementById('btn-pause').addEventListener('click', pauseExercise);
+        document.getElementById('btn-stop').addEventListener('click', stopExercise);
+
+        document.getElementById('exercise-select').addEventListener('change', (e) => {
+            currentExercise = e.target.value;
+            stopExercise();
+            const exercise = exercises[currentExercise];
+
+            // Update tempo to exercise's default
+            tempo = exercise.tempo;
+            document.getElementById('tempo-slider').value = tempo;
+            document.getElementById('tempo-value').textContent = tempo + ' BPM';
+
+            updateInfo(`Selected: ${exercise.name}`);
+            updateGuidance();
+            updatePrimer();
+        });
+
+        document.getElementById('tempo-slider').addEventListener('input', (e) => {
+            tempo = parseInt(e.target.value);
+            document.getElementById('tempo-value').textContent = tempo + ' BPM';
+        });
+
+        document.getElementById('volume-slider').addEventListener('input', (e) => {
+            volume = parseInt(e.target.value);
+            document.getElementById('volume-value').textContent = volume + '%';
+        });
+
+        // Initialize
+        tempo = exercises[currentExercise].tempo;
+        document.getElementById('tempo-slider').value = tempo;
+        document.getElementById('tempo-value').textContent = tempo + ' BPM';
+        updateButtons();
+        updateGuidance();
+        updatePrimer();
+    </script>
+</body>
+</html>
