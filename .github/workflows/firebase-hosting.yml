@@ -22,7 +22,7 @@ jobs:
           # The ID of your Firebase project. Find this in the Firebase Console URL or Project Settings.
           repoToken: ${{ secrets.GITHUB_TOKEN }} # Used to allow GitHub to manage the deploy status
           firebaseServiceAccount: ${{ secrets.FIREBASE_DEPLOY_TOKEN }} # The token we saved in Step 2
-          projectId: YOUR_PROJECT_ID # <-- !! CHANGE THIS TO YOUR ACTUAL PROJECT ID !!
+          projectId: conversation-ai-tinacosta
           channelId: live # Deploy to the default live URL
           # The path to your public directory (usually the folder containing index.html)
           # Default is 'public' if you ran 'firebase init'
