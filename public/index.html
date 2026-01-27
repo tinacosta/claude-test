@@ -218,6 +218,18 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .solfege-display {
+            font-size: 28px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: lowercase;
+            font-style: italic;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 34px;
+        }
+
         .info {
             font-size: 16px;
             color: #94a3b8;
@@ -317,8 +329,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎵 Soprano Ornamentation Exercises</h1>
-        <p class="subtitle">D3 to D6 Range • 18 Advanced Exercises</p>
+        <h1>🎵 Soprano Training Exercises</h1>
+        <p class="subtitle">D3 to D6 Range • Ornamentation & Interval Ear Training</p>
 
         <div class="exercise-selector">
             <select id="exercise-select">
@@ -341,6 +353,28 @@
                 <option value="whitney">🎤 Whitney Houston Gospel Run</option>
                 <option value="ariana">🎤 Ariana Grande Contemporary Run</option>
                 <option value="rosalia">🎤 Rosalía Flamenco-Pop Run</option>
+                <optgroup label="🎹 Interval Ear Training (Movable Do)">
+                    <option value="interval_m2">Minor 2nd (do-ra)</option>
+                    <option value="interval_M2">Major 2nd (do-re)</option>
+                    <option value="interval_m3">Minor 3rd (do-me)</option>
+                    <option value="interval_M3">Major 3rd (do-mi)</option>
+                    <option value="interval_P4">Perfect 4th (do-fa)</option>
+                    <option value="interval_TT">Tritone (do-fi/se)</option>
+                    <option value="interval_P5">Perfect 5th (do-sol)</option>
+                    <option value="interval_m6">Minor 6th (do-le)</option>
+                    <option value="interval_M6">Major 6th (do-la)</option>
+                    <option value="interval_m7">Minor 7th (do-te)</option>
+                    <option value="interval_M7">Major 7th (do-ti)</option>
+                    <option value="interval_P8">Perfect Octave (do-do')</option>
+                </optgroup>
+                <optgroup label="🎼 Solfege Patterns (Movable Do)">
+                    <option value="solfege_major">Major Scale (do-re-mi-fa-sol-la-ti-do)</option>
+                    <option value="solfege_minor">Natural Minor (do-re-me-fa-sol-le-te-do)</option>
+                    <option value="solfege_pentatonic">Major Pentatonic (do-re-mi-sol-la)</option>
+                    <option value="solfege_arpeggios">Major Arpeggios (do-mi-sol-do')</option>
+                    <option value="solfege_intervals_asc">All Intervals Ascending</option>
+                    <option value="solfege_intervals_random">Random Interval Drill</option>
+                </optgroup>
             </select>
         </div>
 
@@ -368,6 +402,7 @@
 
         <div class="display-area">
             <div class="current-note" id="current-note">—</div>
+            <div class="solfege-display" id="solfege-display"></div>
             <div class="info" id="info-text">Select exercise and tap Start</div>
             <div class="status" id="status-text">Ready</div>
         </div>
@@ -424,6 +459,58 @@
             return baseNote;
         }
 
+        // Movable Do Solfege System
+        // Maps semitone intervals from root to solfege syllables
+        const solfegeMap = {
+            0: 'do',
+            1: 'ra',   // raised do / lowered re (chromatic)
+            2: 're',
+            3: 'me',   // lowered mi (minor 3rd)
+            4: 'mi',
+            5: 'fa',
+            6: 'fi',   // raised fa / lowered sol (tritone)
+            7: 'sol',
+            8: 'le',   // lowered la (minor 6th)
+            9: 'la',
+            10: 'te',  // lowered ti (minor 7th)
+            11: 'ti',
+            12: "do'"  // octave
+        };
+
+        // Extended solfege for chromatic alterations
+        const chromaticSolfegeMap = {
+            0: 'do',
+            1: 'di/ra',  // raised do or lowered re
+            2: 're',
+            3: 'ri/me',  // raised re or lowered mi
+            4: 'mi',
+            5: 'fa',
+            6: 'fi/se',  // raised fa or lowered sol
+            7: 'sol',
+            8: 'si/le',  // raised sol or lowered la
+            9: 'la',
+            10: 'li/te', // raised la or lowered ti
+            11: 'ti',
+            12: "do'"
+        };
+
+        // Get solfege syllable for an interval (in semitones)
+        function getSolfege(interval) {
+            const normalizedInterval = ((interval % 12) + 12) % 12;
+            const octaveMarker = Math.floor(interval / 12);
+            let syllable = solfegeMap[normalizedInterval] || 'do';
+            // Add octave markers for higher octaves
+            if (octaveMarker > 0 && normalizedInterval !== 0) {
+                syllable += "'".repeat(octaveMarker);
+            }
+            return syllable;
+        }
+
+        // Generate solfege sequence for a pattern
+        function getPatternSolfege(pattern) {
+            return pattern.map(interval => getSolfege(interval));
+        }
+
         // Check if a pattern starting at a note would exceed max range
         function patternExceedsMax(startNote, pattern, maxNote) {
             const allNoteNames = Object.keys(notes);
@@ -457,8 +544,9 @@
         }
 
         // Generate notes for an exercise based on pattern
-        function generateExerciseNotes(pattern) {
+        function generateExerciseNotes(pattern, exerciseSolfege) {
             const allNotes = [];
+            const allSolfege = [];
             const allNoteNames = Object.keys(notes);
             let highestStartNoteIndex = -1;
 
@@ -469,10 +557,17 @@
                     break; // Stop ascending when pattern would exceed D6
                 }
                 highestStartNoteIndex = allNoteNames.indexOf(startNote);
-                for (const interval of pattern) {
-                    allNotes.push(transposeNote(startNote, interval));
+                for (let j = 0; j < pattern.length; j++) {
+                    allNotes.push(transposeNote(startNote, pattern[j]));
+                    // Add solfege if available, otherwise generate from interval
+                    if (exerciseSolfege && exerciseSolfege[j]) {
+                        allSolfege.push(exerciseSolfege[j]);
+                    } else {
+                        allSolfege.push(getSolfege(pattern[j]));
+                    }
                 }
                 allNotes.push('BREATH'); // Breathing marker
+                allSolfege.push(''); // Empty solfege for breath
             }
 
             // Descending - start from one semitone below where we stopped ascending
@@ -483,14 +578,20 @@
                     if (patternGoesBelowMin(startNote, pattern, 'D3')) {
                         break; // Stop descending when pattern would go below D3
                     }
-                    for (const interval of pattern) {
-                        allNotes.push(transposeNote(startNote, interval));
+                    for (let j = 0; j < pattern.length; j++) {
+                        allNotes.push(transposeNote(startNote, pattern[j]));
+                        if (exerciseSolfege && exerciseSolfege[j]) {
+                            allSolfege.push(exerciseSolfege[j]);
+                        } else {
+                            allSolfege.push(getSolfege(pattern[j]));
+                        }
                     }
                     allNotes.push('BREATH'); // Breathing marker
+                    allSolfege.push('');
                 }
             }
 
-            return allNotes;
+            return { notes: allNotes, solfege: allSolfege };
         }
 
         // Exercise patterns (defined as interval patterns from root)
@@ -665,6 +766,208 @@
                 syllables: ['a', 'e', 'ay', 'oh'],
                 technique: 'Contemporary flamenco fusion with dramatic flair. Mix traditional Spanish ornamentation with modern pop precision. Add vibrato and slight pitch bends for authentic Rosalía style.',
                 primer: 'Flamenco-pop cascade: 1-♭2-♭3-4-♭5-♭6-♭7-♭6-♭5-4-♭3-♭2-1. Phrygian mode with fire and passion.'
+            },
+
+            // INTERVAL EAR TRAINING EXERCISES (Movable Do)
+            interval_m2: {
+                name: 'Minor 2nd (do-ra)',
+                pattern: [0, 1, 0, 1, 0], // do-ra repeated for drilling
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'ra'],
+                solfege: ['do', 'ra', 'do', 'ra', 'do'],
+                technique: 'The minor 2nd (half step) creates tension. Think of the "Jaws" theme or a doorbell. Sing "do-ra" and feel the close, tense relationship between the notes.',
+                primer: 'Minor 2nd = 1 semitone. Pattern: do-ra-do-ra-do. The smallest interval, full of tension.',
+                isIntervalExercise: true
+            },
+            interval_M2: {
+                name: 'Major 2nd (do-re)',
+                pattern: [0, 2, 0, 2, 0], // do-re repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 're'],
+                solfege: ['do', 're', 'do', 're', 'do'],
+                technique: 'The major 2nd (whole step) is the first step of a major scale. Think of "Happy Birthday" (Hap-py). Sing "do-re" and feel the natural stepwise motion.',
+                primer: 'Major 2nd = 2 semitones. Pattern: do-re-do-re-do. A whole step, the building block of scales.',
+                isIntervalExercise: true
+            },
+            interval_m3: {
+                name: 'Minor 3rd (do-me)',
+                pattern: [0, 3, 0, 3, 0], // do-me repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'me'],
+                solfege: ['do', 'me', 'do', 'me', 'do'],
+                technique: 'The minor 3rd has a darker, sadder quality. Think of "Greensleeves" or "Hey Jude" (verse). Sing "do-me" and feel the melancholy character.',
+                primer: 'Minor 3rd = 3 semitones. Pattern: do-me-do-me-do. The sound of minor keys.',
+                isIntervalExercise: true
+            },
+            interval_M3: {
+                name: 'Major 3rd (do-mi)',
+                pattern: [0, 4, 0, 4, 0], // do-mi repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'mi'],
+                solfege: ['do', 'mi', 'do', 'mi', 'do'],
+                technique: 'The major 3rd is bright and happy. Think of "Kumbaya" or "Oh When the Saints". Sing "do-mi" and feel the cheerful, stable quality.',
+                primer: 'Major 3rd = 4 semitones. Pattern: do-mi-do-mi-do. The heart of major chords.',
+                isIntervalExercise: true
+            },
+            interval_P4: {
+                name: 'Perfect 4th (do-fa)',
+                pattern: [0, 5, 0, 5, 0], // do-fa repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'fa'],
+                solfege: ['do', 'fa', 'do', 'fa', 'do'],
+                technique: 'The perfect 4th is open and strong. Think of "Here Comes the Bride" or "Amazing Grace". Sing "do-fa" and feel the upward pull.',
+                primer: 'Perfect 4th = 5 semitones. Pattern: do-fa-do-fa-do. Strong, hymn-like quality.',
+                isIntervalExercise: true
+            },
+            interval_TT: {
+                name: 'Tritone (do-fi)',
+                pattern: [0, 6, 0, 6, 0], // do-fi repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'fi'],
+                solfege: ['do', 'fi', 'do', 'fi', 'do'],
+                technique: 'The tritone (augmented 4th/diminished 5th) is unstable and wants to resolve. Think of "The Simpsons" theme or "Maria" (West Side Story). Medieval musicians called it "diabolus in musica".',
+                primer: 'Tritone = 6 semitones. Pattern: do-fi-do-fi-do. The "devil\'s interval" - tense and unstable.',
+                isIntervalExercise: true
+            },
+            interval_P5: {
+                name: 'Perfect 5th (do-sol)',
+                pattern: [0, 7, 0, 7, 0], // do-sol repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'sol'],
+                solfege: ['do', 'sol', 'do', 'sol', 'do'],
+                technique: 'The perfect 5th is the most stable interval besides the octave. Think of "Twinkle Twinkle" (Twin-kle) or "Star Wars" theme. Sing "do-sol" and feel the power and stability.',
+                primer: 'Perfect 5th = 7 semitones. Pattern: do-sol-do-sol-do. The backbone of harmony.',
+                isIntervalExercise: true
+            },
+            interval_m6: {
+                name: 'Minor 6th (do-le)',
+                pattern: [0, 8, 0, 8, 0], // do-le repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'le'],
+                solfege: ['do', 'le', 'do', 'le', 'do'],
+                technique: 'The minor 6th has a bittersweet quality. Think of "The Entertainer" or "Love Story" theme. Sing "do-le" and feel the reaching, yearning character.',
+                primer: 'Minor 6th = 8 semitones. Pattern: do-le-do-le-do. Bittersweet and expressive.',
+                isIntervalExercise: true
+            },
+            interval_M6: {
+                name: 'Major 6th (do-la)',
+                pattern: [0, 9, 0, 9, 0], // do-la repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'la'],
+                solfege: ['do', 'la', 'do', 'la', 'do'],
+                technique: 'The major 6th is warm and romantic. Think of "My Bonnie Lies Over the Ocean" (My Bon-nie). Sing "do-la" and feel the expansive, romantic leap.',
+                primer: 'Major 6th = 9 semitones. Pattern: do-la-do-la-do. Warm, romantic, memorable.',
+                isIntervalExercise: true
+            },
+            interval_m7: {
+                name: 'Minor 7th (do-te)',
+                pattern: [0, 10, 0, 10, 0], // do-te repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'te'],
+                solfege: ['do', 'te', 'do', 'te', 'do'],
+                technique: 'The minor 7th has a bluesy, jazzy feel. Think of "Somewhere" (There\'s a place) from West Side Story or the Star Trek theme. Sing "do-te" and feel the soulful quality.',
+                primer: 'Minor 7th = 10 semitones. Pattern: do-te-do-te-do. Bluesy, jazzy, soulful.',
+                isIntervalExercise: true
+            },
+            interval_M7: {
+                name: 'Major 7th (do-ti)',
+                pattern: [0, 11, 0, 11, 0], // do-ti repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', 'ti'],
+                solfege: ['do', 'ti', 'do', 'ti', 'do'],
+                technique: 'The major 7th creates strong tension wanting to resolve up to the octave. Think of "Take On Me" (chorus leap) or "Superman" theme. Sing "do-ti" and feel the pull toward resolution.',
+                primer: 'Major 7th = 11 semitones. Pattern: do-ti-do-ti-do. Strong tension, yearning for resolution.',
+                isIntervalExercise: true
+            },
+            interval_P8: {
+                name: 'Perfect Octave (do-do\')',
+                pattern: [0, 12, 0, 12, 0], // do-do' repeated
+                duration: 0.6,
+                tempo: 50,
+                syllables: ['do', "do'"],
+                solfege: ['do', "do'", 'do', "do'", 'do'],
+                technique: 'The octave is perfect consonance - the same note at different pitches. Think of "Somewhere Over the Rainbow" (Some-where). Sing "do-do\'" and feel the complete, resolved quality.',
+                primer: 'Perfect Octave = 12 semitones. Pattern: do-do\'-do-do\'-do. Complete resolution.',
+                isIntervalExercise: true
+            },
+
+            // SOLFEGE PATTERN EXERCISES
+            solfege_major: {
+                name: 'Major Scale (Movable Do)',
+                pattern: [0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2, 0], // Major scale up and down
+                duration: 0.4,
+                tempo: 60,
+                syllables: ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti', "do'"],
+                solfege: ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti', "do'", 'ti', 'la', 'sol', 'fa', 'mi', 're', 'do'],
+                technique: 'The major scale is the foundation of Western music. Sing each solfege syllable clearly: do-re-mi-fa-sol-la-ti-do. Focus on accurate pitch and smooth transitions.',
+                primer: 'Major scale: do-re-mi-fa-sol-la-ti-do\'-ti-la-sol-fa-mi-re-do. The foundation of movable do.',
+                isIntervalExercise: true
+            },
+            solfege_minor: {
+                name: 'Natural Minor Scale (Movable Do)',
+                pattern: [0, 2, 3, 5, 7, 8, 10, 12, 10, 8, 7, 5, 3, 2, 0], // Natural minor up and down
+                duration: 0.4,
+                tempo: 60,
+                syllables: ['do', 're', 'me', 'fa', 'sol', 'le', 'te', "do'"],
+                solfege: ['do', 're', 'me', 'fa', 'sol', 'le', 'te', "do'", 'te', 'le', 'sol', 'fa', 'me', 're', 'do'],
+                technique: 'The natural minor scale uses lowered 3rd, 6th, and 7th degrees. Sing do-re-ME-fa-sol-LE-TE-do. Notice the darker color from the flattened notes.',
+                primer: 'Natural minor: do-re-me-fa-sol-le-te-do\'-te-le-sol-fa-me-re-do. Minor mode with la-based solfege alternative.',
+                isIntervalExercise: true
+            },
+            solfege_pentatonic: {
+                name: 'Major Pentatonic (Movable Do)',
+                pattern: [0, 2, 4, 7, 9, 12, 9, 7, 4, 2, 0], // Pentatonic up and down
+                duration: 0.4,
+                tempo: 60,
+                syllables: ['do', 're', 'mi', 'sol', 'la', "do'"],
+                solfege: ['do', 're', 'mi', 'sol', 'la', "do'", 'la', 'sol', 'mi', 're', 'do'],
+                technique: 'The pentatonic scale (5 notes) is found in folk music worldwide. No half steps means no tension! Sing do-re-mi-sol-la-do. Great for improvisation.',
+                primer: 'Major pentatonic: do-re-mi-sol-la-do\'-la-sol-mi-re-do. Universal scale without semitones.',
+                isIntervalExercise: true
+            },
+            solfege_arpeggios: {
+                name: 'Major Arpeggios (Movable Do)',
+                pattern: [0, 4, 7, 12, 7, 4, 0], // Major triad arpeggio
+                duration: 0.45,
+                tempo: 55,
+                syllables: ['do', 'mi', 'sol', "do'"],
+                solfege: ['do', 'mi', 'sol', "do'", 'sol', 'mi', 'do'],
+                technique: 'The major triad (do-mi-sol) is the foundation of harmony. Sing the arpeggio up and down, listening for the blend of the three chord tones plus octave.',
+                primer: 'Major arpeggio: do-mi-sol-do\'-sol-mi-do. The major triad in melodic form.',
+                isIntervalExercise: true
+            },
+            solfege_intervals_asc: {
+                name: 'All Intervals Ascending',
+                pattern: [0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9, 0, 10, 0, 11, 0, 12], // All intervals from do
+                duration: 0.5,
+                tempo: 45,
+                syllables: ['do', 'ra', 're', 'me', 'mi', 'fa', 'fi', 'sol', 'le', 'la', 'te', 'ti', "do'"],
+                solfege: ['do', 'ra', 'do', 're', 'do', 'me', 'do', 'mi', 'do', 'fa', 'do', 'fi', 'do', 'sol', 'do', 'le', 'do', 'la', 'do', 'te', 'do', 'ti', 'do', "do'"],
+                technique: 'Practice all intervals from do: m2, M2, m3, M3, P4, TT, P5, m6, M6, m7, M7, P8. Return to do between each interval to reinforce the tonal center.',
+                primer: 'All intervals from do: do-ra, do-re, do-me, do-mi, do-fa, do-fi, do-sol, do-le, do-la, do-te, do-ti, do-do\'.',
+                isIntervalExercise: true
+            },
+            solfege_intervals_random: {
+                name: 'Random Interval Drill',
+                pattern: [0, 7, 0, 4, 0, 5, 0, 9, 0, 3, 0, 12, 0, 2, 0, 10, 0, 6, 0, 8, 0, 11, 0, 1], // Random order intervals
+                duration: 0.6,
+                tempo: 40,
+                syllables: ['do', 'sol', 'mi', 'fa', 'la', 'me', "do'", 're', 'te', 'fi', 'le', 'ti', 'ra'],
+                solfege: ['do', 'sol', 'do', 'mi', 'do', 'fa', 'do', 'la', 'do', 'me', 'do', "do'", 'do', 're', 'do', 'te', 'do', 'fi', 'do', 'le', 'do', 'ti', 'do', 'ra'],
+                technique: 'Random interval practice for ear training. Try to identify each interval before looking. P5, M3, P4, M6, m3, P8, M2, m7, TT, m6, M7, m2.',
+                primer: 'Random drill: P5-M3-P4-M6-m3-P8-M2-m7-TT-m6-M7-m2. Challenge your interval recognition!',
+                isIntervalExercise: true
             }
         };
 
@@ -745,6 +1048,7 @@
                 stopExercise();
                 updateStatus('Exercise complete!');
                 updateNote('✓');
+                updateSolfege('');
                 updateInfo('Well done!');
                 return;
             }
@@ -764,6 +1068,14 @@
             const frequency = notes[noteName];
 
             updateNote(noteName);
+
+            // Show solfege for interval exercises
+            if (exercise.isIntervalExercise && exercise.noteSolfege && exercise.noteSolfege[currentNoteIndex]) {
+                updateSolfege(exercise.noteSolfege[currentNoteIndex]);
+            } else {
+                updateSolfege('');
+            }
+
             updateInfo(`Note ${currentNoteIndex + 1} of ${exercise.notes.length}`);
             updateStatus('Playing...');
 
@@ -795,11 +1107,18 @@
 
             const exercise = exercises[currentExercise];
 
-            // Generate notes from pattern
-            exercise.notes = generateExerciseNotes(exercise.pattern);
+            // Generate notes from pattern (with solfege if it's an interval exercise)
+            const generated = generateExerciseNotes(exercise.pattern, exercise.solfege);
+            exercise.notes = generated.notes;
+            exercise.noteSolfege = generated.solfege;
 
             updateInfo(`${exercise.name}`);
             updateStatus('Playing...');
+
+            // Clear solfege display if not an interval exercise
+            if (!exercise.isIntervalExercise) {
+                updateSolfege('');
+            }
 
             updateButtons();
             playNextNote();
@@ -823,6 +1142,7 @@
             currentNoteIndex = 0;
             releaseWakeLock(); // Allow screen to sleep
             updateNote('—');
+            updateSolfege('');
             updateStatus('Stopped');
             updateInfo('Select exercise and tap Start');
             updateButtons();
@@ -839,6 +1159,10 @@
 
         function updateStatus(text) {
             document.getElementById('status-text').textContent = text;
+        }
+
+        function updateSolfege(text) {
+            document.getElementById('solfege-display').textContent = text;
         }
 
         function updateButtons() {
